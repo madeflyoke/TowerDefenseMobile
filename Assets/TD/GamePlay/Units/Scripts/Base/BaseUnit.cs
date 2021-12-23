@@ -1,5 +1,6 @@
 using UnityEngine;
 using PathCreation.Examples;
+using PathCreation;
 
 namespace TD.GamePlay.Units
 {
@@ -13,17 +14,26 @@ namespace TD.GamePlay.Units
 
         private float currenHealthPoints;
         private float movementSpeed;
-        private PathFollower pathFollower;
+        public PathFollower pathFollower { get; private set; }
 
         private void Awake()
         {
-            pathFollower = GetComponent<PathFollower>();    
+            pathFollower = GetComponent<PathFollower>();   
+            pathFollower.pathCreator = FindObjectOfType<PathCreator>();    
             pathFollower.speed *= speedMultiplier;
             movementSpeed = pathFollower.speed;
-            currenHealthPoints = maxHealthPoints;
         }
 
-        protected virtual void Move() { }
+        private void OnEnable()
+        {
+            ResetValues();
+        }
+
+        public virtual void Move()        
+        {
+            pathFollower.canMove = true;
+        }
+
         public virtual void GetDamage(float damage) 
         {
             currenHealthPoints -= damage;
@@ -32,10 +42,16 @@ namespace TD.GamePlay.Units
                 Die();
             }
         }
+
         protected virtual void Die()
         {
-            gameObject.layer = 7;
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+        }
+
+        protected virtual void ResetValues()
+        {
+            pathFollower.ResetPath();
+            currenHealthPoints = maxHealthPoints;
         }
     }
 }

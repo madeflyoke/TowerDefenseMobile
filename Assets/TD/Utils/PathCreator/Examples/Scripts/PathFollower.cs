@@ -23,15 +23,20 @@ namespace PathCreation.Examples
 
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                canMove = true;
-            }
-
             if (canMove)
             {
                 Moving();
             }
+        }
+
+        public void ResetPath()
+        {
+            distanceTravelled = 0;
+        }
+
+        public Vector3 GetPointOnPath(float distance)
+        {
+            return pathCreator.path.GetPointAtDistance(distanceTravelled + distance); 
         }
 
         void Moving()

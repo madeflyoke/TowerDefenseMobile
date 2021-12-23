@@ -6,16 +6,10 @@ namespace TD.GamePlay.Managers
 {
     public class Pooler : MonoBehaviour
     {
-        [Serializable]
-        public struct PoolObject
-        {
-            public int count;
-            public GameObject prefabKey;
-        }
 
-        [SerializeField] private List<PoolObject> poolObjects;
+        [SerializeField] private List<Poolable> poolObjects;
         private Dictionary<GameObject, Queue<GameObject>> poolDict;
-       
+        
         private void Awake()
         {
             poolDict = new Dictionary<GameObject, Queue<GameObject>>();
@@ -24,30 +18,40 @@ namespace TD.GamePlay.Managers
 
         private void Spawn()
         {
-            foreach (PoolObject poolObject in poolObjects)
+            foreach (Poolable poolObject in poolObjects)
             {
                 Queue<GameObject> pool = new Queue<GameObject>();
-                for (int i = 0; i < poolObject.count; i++)
+                for (int i = 0; i < poolObject.Count; i++)
                 {                 
-                    GameObject go = Instantiate(poolObject.prefabKey,transform.position, Quaternion.identity, transform);
+                    GameObject go = Instantiate(poolObject.gameObject,transform.position, Quaternion.identity, transform);
                     go.SetActive(false);
                     pool.Enqueue(go);
                 }
-                poolDict.Add(poolObject.prefabKey, pool);
+                poolDict.Add(poolObject.gameObject, pool);
+
             }
         }
 
-        public GameObject GetObjectFromPool(GameObject prefabKey, Vector3 pos)
+        public GameObject GetObjectFromPool(GameObject prefab, Vector3 pos)
         {
-            if (poolDict.ContainsKey(prefabKey)==false)
+            if (poolDict.ContainsKey(prefab)==false)
             {
-                throw new Exception(prefabKey + " is not key of dictionary");
+                throw new Exception(prefab + " is not key of dictionary");
             }
-            var pool = poolDict[prefabKey];
-            GameObject go = pool.Dequeue();
+            var pool = poolDict[prefab];
+            GameObject go = pool.Count>0&&!pool.Peek().activeInHierarchy?pool.Dequeue()
+                                                                         :AddPoolObject(prefab, pool);
+
             go.transform.position = pos;
             go.SetActive(true);
             pool.Enqueue(go);
+            return go;
+        }
+
+        private GameObject AddPoolObject(GameObject prefab, Queue<GameObject> pool)
+        {
+            GameObject go = Instantiate(prefab, transform.position, Quaternion.identity,transform);
+            go.SetActive(false);
             return go;
         }
     }
