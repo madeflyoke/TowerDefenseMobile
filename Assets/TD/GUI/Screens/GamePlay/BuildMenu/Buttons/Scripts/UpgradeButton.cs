@@ -1,36 +1,43 @@
-using UnityEngine;
 using TD.GamePlay.Towers;
+using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
 {
-    public class BuildingButton : BaseButton
+    public class UpgradeButton : BaseButton
     {
-        [SerializeField] private BaseTower towerToBuild;
         [SerializeField] private Text costField;
         private BuildMenuController buildMenu;
-        private bool canBuild;
+        private bool canUpgrade;
 
         protected override void Awake()
         {
             base.Awake();
             buildMenu = GetComponentInParent<BuildMenuController>();
-            costField.text = towerToBuild.Cost.ToString();
+        }
+
+        protected override void Listeners()
+        {
+            Upgrade();
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
             buildMenu.PlayerInfo.currencyChangedEvent += CheckForEnoughCurrency;
-            if (buildMenu.PlayerInfo.CurrencyAmount < towerToBuild.Cost)
+            if (buildMenu.CurrentTower==null)
             {
-                canBuild = false;
+                return;
+            }
+            costField.text = buildMenu.CurrentTower.NextTowerLevel.Cost.ToString();
+            if (buildMenu.PlayerInfo.CurrencyAmount < buildMenu.CurrentTower.NextTowerLevel.Cost)
+            {
+                canUpgrade = false;
                 costField.color = buildMenu.DisableCostColor;
             }
             else
             {
-                canBuild=true;
+                canUpgrade = true;
                 costField.color = buildMenu.EnableCostColor;
             }
         }
@@ -40,34 +47,31 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
             buildMenu.PlayerInfo.currencyChangedEvent -= CheckForEnoughCurrency;
         }
 
-        protected override void Listeners()
-        {
-            BuildTower();
-        }
-
         private void CheckForEnoughCurrency(int currentCurrency)
         {
-            if (currentCurrency >= towerToBuild.Cost)
+            if (currentCurrency >= buildMenu.CurrentTower.NextTowerLevel.Cost)
             {
                 costField.color = buildMenu.EnableCostColor;
-                canBuild = true;
+                canUpgrade = true;
             }
         }
 
-        private void BuildTower()
+        private void Upgrade()
         {
-            if (canBuild==false)
+            if (canUpgrade == false)
             {
+                Debug.Log("false");
                 return;
             }
+            buildMenu.PlayerInfo.RemoveCurrency(buildMenu.CurrentTower.NextTowerLevel.Cost);
+            buildMenu.TowerSpotsContainer.RemoveTowerFromSpot(buildMenu.CurrentTowerSpot);
             BaseTower tower = buildMenu.Container.InstantiatePrefabForComponent<BaseTower>(
-                towerToBuild, buildMenu.CurrentTowerSpot.transform.position,
-                Quaternion.identity, buildMenu.TowerSpotsContainer.transform);
+               buildMenu.CurrentTower.NextTowerLevel, buildMenu.CurrentTowerSpot.transform.position,
+               Quaternion.identity, buildMenu.TowerSpotsContainer.transform);
             buildMenu.TowerSpotsContainer.AddTowerToSpot(buildMenu.CurrentTowerSpot, tower);
-            buildMenu.PlayerInfo.RemoveCurrency(tower.Cost);
-
+            buildMenu.CurrentTower.DestroyTower();
             buildMenu.HideMenu();
         }
     }
-}
 
+}

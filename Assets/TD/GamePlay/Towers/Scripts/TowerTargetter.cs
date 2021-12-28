@@ -28,7 +28,6 @@ namespace TD.GamePlay.Towers
         {
             if (isSearching&&(attacker.currentTarget==null/*||!attacker.currentTarget.gameObject.activeInHierarchy)*/))
             {
-                Debug.Log("im in");
                 colliders = Physics.OverlapSphere(transform.position, baseTower.AttackRange, layerMask: 1 << 6).ToList();
 
                 if (colliders.Count() != 0)
@@ -90,6 +89,7 @@ namespace TD.GamePlay.Towers
                 else
                     closest = distance < closestDistance ? colliders[i] : closest;
             }
+            Debug.Log("CLOSEST " + closest);
             return closest.GetComponent<BaseUnit>();
         }
     }

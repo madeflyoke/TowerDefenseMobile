@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace TD.Inputs
 {
@@ -17,7 +14,7 @@ namespace TD.Inputs
         private void Awake()
         {
             inputs = new PlayerInputs();
-            cam = FindObjectOfType<Camera>();   //!!!!!
+            cam = Camera.main;   
         }
 
         private void OnEnable()
@@ -35,7 +32,6 @@ namespace TD.Inputs
             Ray ray = cam.ScreenPointToRay(inputs.General.SelectPosition.ReadValue<Vector2>());
             if (Physics.Raycast(ray, out RaycastHit hitInfo))
             {
-                Debug.Log(hitInfo.collider.gameObject.name);
                 if (EventSystem.current.IsPointerOverGameObject())
                 {
                     return;

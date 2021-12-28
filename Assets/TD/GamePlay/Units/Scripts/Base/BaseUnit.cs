@@ -4,17 +4,19 @@ using PathCreation;
 
 namespace TD.GamePlay.Units
 {
-    public class BaseUnit : MonoBehaviour
+    public abstract class BaseUnit : MonoBehaviour
     {
         [SerializeField] protected float speedMultiplier;
         [SerializeField] protected float maxHealthPoints;
         [SerializeField] protected float damage;
         public float MovementSpeed { get => movementSpeed; }
         public float Damage { get => damage; }
+        public PathFollower pathFollower { get; private set; }
+        public float MaxHealthPoints { get => maxHealthPoints; }
 
         private float currenHealthPoints;
         private float movementSpeed;
-        public PathFollower pathFollower { get; private set; }
+        private HealthBar healthBar;
 
         private void Awake()
         {
@@ -22,6 +24,9 @@ namespace TD.GamePlay.Units
             pathFollower.pathCreator = FindObjectOfType<PathCreator>();    
             pathFollower.speed *= speedMultiplier;
             movementSpeed = pathFollower.speed;
+            healthBar = GetComponentInChildren<HealthBar>();
+            healthBar.Initialize();
+            healthBar.gameObject.SetActive(false);
         }
 
         private void OnEnable()
@@ -35,12 +40,15 @@ namespace TD.GamePlay.Units
         }
 
         public virtual void GetDamage(float damage) 
-        {
+        {      
             currenHealthPoints -= damage;
             if (currenHealthPoints<=0)
             {
                 Die();
+                return;
             }
+            healthBar.gameObject.SetActive(true);
+            healthBar.UpdateHealth(currenHealthPoints * 100 / maxHealthPoints);
         }
 
         protected virtual void Die()
@@ -52,6 +60,7 @@ namespace TD.GamePlay.Units
         {
             pathFollower.ResetPath();
             currenHealthPoints = maxHealthPoints;
+            healthBar.ResetHealthBar();
         }
     }
 }

@@ -8,28 +8,39 @@ namespace TD.GamePlay.Towers
     {
         [Inject] private Pooler pooler;
 
+        [SerializeField] private BaseTower nextTowerLevel;
         [SerializeField] protected float damage;
         [SerializeField] protected float attackRange;
         [SerializeField] protected float attackSpeed;
-        [SerializeField] protected float cost;
+        [SerializeField] protected int cost;
         [SerializeField] protected float attackPower;
+
+        public int Cost { get => cost; }
         public float AttackRange { get => attackRange; }
         public float AttackSpeed { get => attackSpeed; }
         public float AttackPower { get => attackPower; }
         public float Damage { get => damage; }
         public TowerAttacker Attacker { get; private set; }
         public TowerTargetter Targeter { get; private set; }
+        public BaseTower NextTowerLevel { get=>nextTowerLevel;}
+
 
         private void Awake()
         {
             Attacker = GetComponentInChildren<TowerAttacker>();
             Targeter = GetComponentInChildren<TowerTargetter>();
-            Attacker.Initialize(pooler);
             Targeter.Initialize(this, Attacker);
+            Attacker.Initialize(pooler);
         }
+
         private void Start()
         {
             Targeter.isSearching = true;
+        }
+
+        public void DestroyTower()
+        {
+            Destroy(gameObject);
         }
 
         protected void OnDrawGizmos()

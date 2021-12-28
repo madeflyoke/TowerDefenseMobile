@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace TD.GamePlay.Towers.BuildSpots
 {
-    public class TowerSpotsController : MonoBehaviour
+    public class TowerSpotsContainer : MonoBehaviour
     {
         public Dictionary<GameObject, BaseTower> SpotTowers { get; private set; }
 

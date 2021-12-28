@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
 {
-    public class MenuButton : BaseButton
+    public class MenuPanelButton : BaseButton
     {
         private BuildMenuController buildMenuController;
 

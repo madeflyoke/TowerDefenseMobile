@@ -1,27 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
 {
-    public class BaseButton : MonoBehaviour
+    public abstract class BaseButton : MonoBehaviour
     {
-        private Button button;
-
+        protected Button button;
+     
         protected virtual void Awake()
         {
             button = GetComponent<Button>();
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             button.onClick.AddListener(Listeners);
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
-            button?.onClick.RemoveListener(Listeners);
+            button.onClick.RemoveListener(Listeners);
         }
 
         protected virtual void Listeners() { }

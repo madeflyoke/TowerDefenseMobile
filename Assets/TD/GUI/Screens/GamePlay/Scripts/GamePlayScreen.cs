@@ -1,7 +1,8 @@
 using TD.Inputs;
-using UnityEngine;
 using TD.GUI.Screens.GamePlay.BuildMenu;
 using TD.GamePlay.Towers.BuildSpots;
+using UnityEngine;
+using TD.GUI.Screens.GamePlay.HUD;
 
 namespace TD.GUI.Screens.GamePlay
 {
@@ -9,18 +10,17 @@ namespace TD.GUI.Screens.GamePlay
     {
         private InputsController inputsController;
         private BuildMenuController buildMenuController;
-        private TowerSpotsController towerSpotsController;
+        private TowerSpotsContainer towerSpotsController;
+        private HUDController hudController;
 
         private void Awake()
         {
-            towerSpotsController = FindObjectOfType<TowerSpotsController>(); //!!!!!!
-            buildMenuController = GetComponentInChildren<BuildMenuController>();        
-            inputsController = FindObjectOfType<InputsController>(); //!!!!!!         
-        }
-
-        private void Start()
-        {
-            buildMenuController.HideMenu();
+            buildMenuController = GetComponentInChildren<BuildMenuController>();
+            hudController = GetComponentInChildren<HUDController>();
+            inputsController = FindObjectOfType<InputsController>();
+            towerSpotsController = FindObjectOfType<TowerSpotsContainer>();
+            
+            buildMenuController.Initialize(towerSpotsController);
         }
 
         private void OnEnable()
@@ -38,11 +38,7 @@ namespace TD.GUI.Screens.GamePlay
             buildMenuController.HideMenu();
             if (selected.layer == 9) //towerSpots
             {
-                buildMenuController.SetBuildMenu(selected);
-            }
-            else if (selected.layer == 10) //tower
-            {
-                buildMenuController.SetUpgradeMenu();
+                buildMenuController.SetMenu(selected);
             }
         }
 

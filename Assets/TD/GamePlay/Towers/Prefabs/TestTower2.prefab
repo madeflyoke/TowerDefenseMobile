@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9024681733400108922}
   - component: {fileID: 8489270637377375450}
   - component: {fileID: 4829648339406842232}
-  m_Layer: 10
+  m_Layer: 2
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 8854637798835151533}
   - component: {fileID: 8854637798835151538}
   - component: {fileID: 8854637798835151539}
-  m_Layer: 10
+  m_Layer: 2
   m_Name: Attacker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -206,6 +206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 9129345121016502870, guid: abcfdbdfb3569324588a6994292442fa, type: 3}
   attackPoint: {fileID: 8854637798865614294}
+  splashHitRadius: 1
 --- !u!1 &8854637798865614295
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,7 +216,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8854637798865614294}
-  m_Layer: 10
+  m_Layer: 2
   m_Name: AttackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -246,8 +247,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8854637799356549642}
   - component: {fileID: 8854637799356549641}
-  m_Layer: 10
-  m_Name: TestTower
+  m_Layer: 2
+  m_Name: TestTower2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -261,8 +262,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8854637799356549646}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.732199, y: 0, z: -22.73589}
-  m_LocalScale: {x: 2.9431384, y: 5.125, z: 3.2845}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 5, y: 8, z: 5}
   m_Children:
   - {fileID: 8854637798835151536}
   - {fileID: 8854637800310964341}
@@ -282,11 +283,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2ac5458f0c2da342ad304ca427c1bdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
+  nextTowerLevel: {fileID: 0}
+  damage: 60
   attackRange: 15.12
-  attackSpeed: 0.7
-  cost: 0
-  attackPower: 1
+  attackSpeed: 0.4
+  cost: 10
+  attackPower: 0.8
 --- !u!1 &8854637800310964346
 GameObject:
   m_ObjectHideFlags: 0
