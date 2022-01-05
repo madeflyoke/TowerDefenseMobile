@@ -1,14 +1,19 @@
 using UnityEngine;
 using PathCreation.Examples;
 using PathCreation;
+using Zenject;
+using TD.GamePlay.Managers;
 
 namespace TD.GamePlay.Units
 {
     public abstract class BaseUnit : MonoBehaviour
     {
+        [Inject] private GameManager gameManager;
+
         [SerializeField] protected float speedMultiplier;
         [SerializeField] protected float maxHealthPoints;
         [SerializeField] protected float damage;
+        [SerializeField] protected int killReward;
         public float MovementSpeed { get => movementSpeed; }
         public float Damage { get => damage; }
         public PathFollower pathFollower { get; private set; }
@@ -29,7 +34,7 @@ namespace TD.GamePlay.Units
             healthBar.gameObject.SetActive(false);
         }
 
-        private void OnEnable()
+        private void OnDisable()
         {
             ResetValues();
         }
@@ -53,6 +58,7 @@ namespace TD.GamePlay.Units
 
         protected virtual void Die()
         {
+            gameManager.AddCurrency(killReward);
             gameObject.SetActive(false);
         }
 

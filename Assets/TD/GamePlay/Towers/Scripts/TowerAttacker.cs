@@ -43,9 +43,7 @@ namespace TD.GamePlay.Towers
 
         private Vector3 CorrectShot(float attackPower)
         {
-            Vector3 correctPosition = currentTarget.pathFollower.GetPointOnPath(1 / attackPower * currentTarget.MovementSpeed);
-            //Vector3 additionalPos = currentTarget.transform.forward * (currentTarget.MovementSpeed * (1 / attackPower));
-            //Vector3 correctPos = currentTarget.transform.position + additionalPos;            
+            Vector3 correctPosition = currentTarget.pathFollower.GetPointOnPath(1 / attackPower * currentTarget.MovementSpeed);         
             return correctPosition;
         }
 

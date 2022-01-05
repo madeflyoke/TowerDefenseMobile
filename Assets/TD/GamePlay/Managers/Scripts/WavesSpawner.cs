@@ -60,6 +60,7 @@ namespace TD.GamePlay.Managers
             currentWaveIndex++;
             if (currentWaveIndex > waves.Count - 1)
             {
+                Debug.Log("END WAVES");
                 return;
             }
             await UniTask.Delay((int)waves[currentWaveIndex].WaveDelay * 1000,cancellationToken:cancellationToken.Token);

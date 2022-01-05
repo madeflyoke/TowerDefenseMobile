@@ -9,9 +9,11 @@ namespace TD.GamePlay.Managers
     public class Pooler : MonoBehaviour
     {
         [Inject] private GameManager gameManager;
+        [Inject] private DiContainer diContainer;
+
         [SerializeField] private List<Poolable> poolObjects;
         private Dictionary<GameObject, Queue<GameObject>> poolDict;
-        
+               
         private void Awake()
         {
             poolDict = new Dictionary<GameObject, Queue<GameObject>>();
@@ -43,7 +45,7 @@ namespace TD.GamePlay.Managers
                 Queue<GameObject> pool = new Queue<GameObject>();
                 for (int i = 0; i < poolObject.Count; i++)
                 {                 
-                    GameObject go = Instantiate(poolObject.gameObject,transform.position, Quaternion.identity, transform);
+                    GameObject go = diContainer.InstantiatePrefab(poolObject.gameObject,transform.position, Quaternion.identity, transform);
                     go.SetActive(false);
                     pool.Enqueue(go);
                 }

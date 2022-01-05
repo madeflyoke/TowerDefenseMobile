@@ -8,11 +8,11 @@ namespace TD.GamePlay.Towers
     [RequireComponent(typeof(SphereCollider))]
     public class TowerTargetter : MonoBehaviour
     {
+        public bool isSearching { get; set; }
         private SphereCollider attackRangeCollider;
         private BaseTower baseTower;
         private List<Collider> colliders;
         private TowerAttacker attacker;
-        public bool isSearching { get; set; }
 
         public void Initialize(BaseTower baseTower, TowerAttacker towerAttacker)
         {
@@ -21,10 +21,10 @@ namespace TD.GamePlay.Towers
             colliders = new List<Collider>();
             attackRangeCollider = gameObject.GetComponent<SphereCollider>();
             attackRangeCollider.isTrigger = true;
-            attackRangeCollider.radius = baseTower.AttackRange/5f;
+            attackRangeCollider.radius = baseTower.AttackRange;
         }
 
-        private void FixedUpdate()
+        private void Update() //if fps drop then Fixed!!!!!!
         {
             if (isSearching&&(attacker.currentTarget==null/*||!attacker.currentTarget.gameObject.activeInHierarchy)*/))
             {

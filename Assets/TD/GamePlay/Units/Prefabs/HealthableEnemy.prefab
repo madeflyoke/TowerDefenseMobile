@@ -144,9 +144,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b871315a4375f4a448b30d5e60c2f2d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedMultiplier: 2
+  speedMultiplier: 1
   maxHealthPoints: 100
-  damage: 50
+  damage: 10
+  killReward: 1
 --- !u!114 &317209848566992427
 MonoBehaviour:
   m_ObjectHideFlags: 0
