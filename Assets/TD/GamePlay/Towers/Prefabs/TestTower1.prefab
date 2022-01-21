@@ -257,7 +257,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextTowerLevel: {fileID: 8854637799356549641, guid: 0e19fde512da32344a1b9b0d686f7842, type: 3}
   damage: 40
-  attackRange: 15.12
+  attackRange: 10
   attackSpeed: 0.5
   cost: 5
   attackPower: 0.9

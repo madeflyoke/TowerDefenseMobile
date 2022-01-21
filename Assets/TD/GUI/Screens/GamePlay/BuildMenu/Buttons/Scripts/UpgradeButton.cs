@@ -67,7 +67,7 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
             buildMenu.TowerSpotsContainer.RemoveTowerFromSpot(buildMenu.CurrentTowerSpot);
             BaseTower tower = buildMenu.Container.InstantiatePrefabForComponent<BaseTower>(
                buildMenu.CurrentTower.NextTowerLevel, buildMenu.CurrentTowerSpot.transform.position,
-               Quaternion.identity, buildMenu.TowerSpotsContainer.transform);
+               Quaternion.identity, buildMenu.CurrentTowerSpot.transform);
             buildMenu.TowerSpotsContainer.AddTowerToSpot(buildMenu.CurrentTowerSpot, tower);
             buildMenu.CurrentTower.DestroyTower();
             buildMenu.HideMenu();

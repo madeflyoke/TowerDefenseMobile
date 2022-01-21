@@ -3,14 +3,9 @@ using UnityEngine;
 
 namespace TD.GamePlay.Towers.BuildSpots
 {
-    public class TowerSpotsContainer : MonoBehaviour
+    public class TowerSpotsContainer
     {
-        public Dictionary<GameObject, BaseTower> SpotTowers { get; private set; }
-
-        private void Awake()
-        {
-            SpotTowers = new Dictionary<GameObject, BaseTower>();
-        }
+        public Dictionary<GameObject, BaseTower> SpotTowers { get; private set; } = new Dictionary<GameObject, BaseTower>();
 
         public void AddTowerToSpot(GameObject spot, BaseTower tower)
         {

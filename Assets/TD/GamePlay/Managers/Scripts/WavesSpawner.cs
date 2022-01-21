@@ -5,6 +5,8 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Zenject;
 using System.Threading;
+using System;
+using PathCreation;
 
 namespace TD.GamePlay.Managers
 {
@@ -13,8 +15,16 @@ namespace TD.GamePlay.Managers
         [Inject] private GameManager gameManager;
         [Inject] private Pooler pooler;
 
-        [SerializeField] private List<Wave> waves;
-        private int currentWaveIndex;
+        [Serializable]
+        public struct PathWaves
+        {
+            public int delay;
+            public PathCreator path;
+            public List<Wave> waves;
+            public int currentWaveIndex { get; set; }
+        }
+
+        [SerializeField] private List<PathWaves> pathWaves;
         private CancellationTokenSource cancellationToken;
 
         private void Awake()
@@ -26,7 +36,10 @@ namespace TD.GamePlay.Managers
         {
             if (Input.GetKeyDown(KeyCode.G))
             {
-                PushEnemy();
+                for (int i = 0; i < pathWaves.Count; i++)
+                {                
+                    PushEnemy(pathWaves[i]);
+                }             
             }
             if (Input.GetKeyDown(KeyCode.Y))
             {
@@ -43,28 +56,34 @@ namespace TD.GamePlay.Managers
             gameManager.endGameEvent -= cancellationToken.Cancel;
         }
 
-        private async void PushEnemy()
+        private async void PushEnemy(PathWaves pathWaves)
         {
-            for (int i = 0; i < waves[currentWaveIndex].Enemies.Count; i++)
+            if (pathWaves.currentWaveIndex==0)
             {
-                var enemyConfig = waves[currentWaveIndex].Enemies[i];
-                await UniTask.Delay((int)enemyConfig.spawnDelay * 1000,cancellationToken: cancellationToken.Token);
-                GameObject enemy = pooler.GetObjectFromPool(enemyConfig.prefab, enemyConfig.spawnPosition.position);
-                enemy.GetComponent<BaseUnit>().Move(); ///!!!
+                await UniTask.Delay(pathWaves.delay * 1000, cancellationToken: cancellationToken.Token);
             }
-            NextWaveSpawn();
+            for (int i = 0; i < pathWaves.waves[pathWaves.currentWaveIndex].Enemies.Count; i++)
+            {
+                var enemyConfig = pathWaves.waves[pathWaves.currentWaveIndex].Enemies[i];
+                await UniTask.Delay((int)enemyConfig.spawnDelay * 1000,cancellationToken: cancellationToken.Token);
+                GameObject enemy = pooler.GetObjectFromPool(enemyConfig.prefab, pathWaves.path.bezierPath.GetPoint(0));
+                BaseUnit unit = enemy.GetComponent<BaseUnit>();
+                unit.pathFollower.pathCreator = pathWaves.path;
+                unit.Move(); 
+            }
+            NextWaveSpawn(pathWaves);
         }
 
-        private async void NextWaveSpawn()
+        private async void NextWaveSpawn(PathWaves pathWaves)
         {
-            currentWaveIndex++;
-            if (currentWaveIndex > waves.Count - 1)
+            pathWaves.currentWaveIndex++;
+            if (pathWaves.currentWaveIndex > pathWaves.waves.Count - 1)
             {
                 Debug.Log("END WAVES");
                 return;
             }
-            await UniTask.Delay((int)waves[currentWaveIndex].WaveDelay * 1000,cancellationToken:cancellationToken.Token);
-            PushEnemy();
+            await UniTask.Delay((int)pathWaves.waves[pathWaves.currentWaveIndex].WaveDelay * 1000,cancellationToken:cancellationToken.Token);
+            PushEnemy(pathWaves);
         }
     }
 }

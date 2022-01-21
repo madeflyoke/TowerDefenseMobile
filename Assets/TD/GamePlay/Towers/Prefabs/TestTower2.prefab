@@ -271,7 +271,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextTowerLevel: {fileID: 0}
   damage: 60
-  attackRange: 15.12
+  attackRange: 10
   attackSpeed: 0.4
   cost: 10
   attackPower: 0.8

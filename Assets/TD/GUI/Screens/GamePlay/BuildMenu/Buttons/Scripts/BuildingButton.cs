@@ -62,7 +62,7 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
             }
             BaseTower tower = buildMenu.Container.InstantiatePrefabForComponent<BaseTower>(
                 towerToBuild, buildMenu.CurrentTowerSpot.transform.position,
-                Quaternion.identity, buildMenu.TowerSpotsContainer.transform);
+                Quaternion.identity, buildMenu.CurrentTowerSpot.transform);
             buildMenu.TowerSpotsContainer.AddTowerToSpot(buildMenu.CurrentTowerSpot, tower);
             buildMenu.PlayerInfo.RemoveCurrency(tower.Cost);
 

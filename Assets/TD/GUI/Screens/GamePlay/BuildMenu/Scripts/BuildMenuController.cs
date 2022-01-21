@@ -27,10 +27,10 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu
         private SellButton sellButton;
         
 
-        public void Initialize(TowerSpotsContainer towerSpots)
+        public void Initialize()
         {
             cam = Camera.main;
-            TowerSpotsContainer = towerSpots;
+            TowerSpotsContainer = new TowerSpotsContainer();
             buildingButton = GetComponentInChildren<BuildingButton>();
             upgradeButton = GetComponentInChildren<UpgradeButton>();
             sellButton = GetComponentInChildren<SellButton>();
@@ -66,19 +66,16 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu
         {                
             buildingButton.gameObject.SetActive(true);
             gameObject.SetActive(true);
-            Debug.Log("buildmenu");
         }
 
         private void SetUpgradeMenu()
         {
-            Debug.Log("TUT " + CurrentTower.NextTowerLevel);
             if (CurrentTower.NextTowerLevel!=null)
             {
                 upgradeButton.gameObject.SetActive(true);
             }      
             sellButton.gameObject.SetActive(true);
             gameObject.SetActive(true);
-            Debug.Log("upgrade menu");
         }
 
         public void HideMenu()

@@ -61,13 +61,13 @@ namespace TD.GamePlay.Managers
                 throw new Exception(prefab + " is not key of dictionary");
             }
             var pool = poolDict[prefab];
-            GameObject go = pool.Count>0&&!pool.Peek().activeInHierarchy?pool.Dequeue()
+            GameObject poolableObject = pool.Count>0&&!pool.Peek().activeInHierarchy?pool.Dequeue()
                                                                          :AddPoolObject(prefab, pool);
 
-            go.transform.position = pos;
-            go.SetActive(true);
-            pool.Enqueue(go);
-            return go;
+            poolableObject.transform.position = pos;
+            poolableObject.SetActive(true);
+            pool.Enqueue(poolableObject);
+            return poolableObject;
         }
 
         private GameObject AddPoolObject(GameObject prefab, Queue<GameObject> pool)

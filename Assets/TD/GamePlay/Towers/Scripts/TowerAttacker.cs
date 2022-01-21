@@ -11,6 +11,8 @@ namespace TD.GamePlay.Towers
         [SerializeField] private GameObject projectilePrefab;
         [SerializeField] private Transform attackPoint;
         [SerializeField] private float splashHitRadius;
+        [SerializeField] private Transform turret;
+        [SerializeField] private float turretRotationSpeed;
         public bool isAttack { get; set; }
         public BaseUnit currentTarget { get; private set; }
 
@@ -52,6 +54,7 @@ namespace TD.GamePlay.Towers
             currentTarget = enemy;
             while (isAttack)
             {
+                RotateTurret();
                 if (currentTarget.gameObject.activeInHierarchy == false)
                 {
                     isAttack = false;
@@ -67,12 +70,25 @@ namespace TD.GamePlay.Towers
             currentTarget = null;
         }
 
+        private void RotateTurret()
+        {
+            Quaternion newRot = Quaternion.LookRotation(currentTarget.transform.position - turret.position, Vector3.up);
+            newRot.x = 0f;
+            newRot.z = 0f;
+            turret.rotation = Quaternion.Slerp(turret.rotation, newRot, turretRotationSpeed * Time.deltaTime);
+        }
+
         private void OnDrawGizmos()
         {
             if (currentTarget != null)
             {
                 Gizmos.DrawRay(attackPoint.position, (currentTarget.transform.position - attackPoint.position));
             }
+        }
+
+        private void OnDestroy()
+        {
+            isAttack = false;
         }
     }
 }

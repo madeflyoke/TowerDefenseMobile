@@ -36,6 +36,11 @@ namespace TD.GamePlay.Towers
                 }
             }
         }
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.black;
+            Gizmos.DrawSphere(transform.position, baseTower.AttackRange);
+        }
 
         private void OnTriggerExit(Collider other)
         {

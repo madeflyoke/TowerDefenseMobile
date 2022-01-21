@@ -41,6 +41,14 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""CameraZoom"",
+                    ""type"": ""Value"",
+                    ""id"": ""18381fc8-bb7c-4309-a4d2-36dde283e9ca"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": ""Clamp(min=-1,max=1)"",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -120,6 +128,50 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                     ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""749d38ba-a0d0-498a-a54a-fc106023fefa"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and mouse"",
+                    ""action"": ""CameraZoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""PlusMinusZoom"",
+                    ""id"": ""25c2ced2-1e3d-40bf-8c12-111661dd6481"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraZoom"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""69f23ae4-23da-466b-8b0b-ae86fffaa59a"",
+                    ""path"": ""<Keyboard>/numpadMinus"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and mouse"",
+                    ""action"": ""CameraZoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""4efe0c1e-3ae6-4c38-82b6-c187eb1fe7a0"",
+                    ""path"": ""<Keyboard>/numpadPlus"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and mouse"",
+                    ""action"": ""CameraZoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -148,6 +200,7 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
         m_General_Camera = m_General.FindAction("Camera", throwIfNotFound: true);
         m_General_SelectPosition = m_General.FindAction("SelectPosition", throwIfNotFound: true);
         m_General_Select = m_General.FindAction("Select", throwIfNotFound: true);
+        m_General_CameraZoom = m_General.FindAction("CameraZoom", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -200,6 +253,7 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
     private readonly InputAction m_General_Camera;
     private readonly InputAction m_General_SelectPosition;
     private readonly InputAction m_General_Select;
+    private readonly InputAction m_General_CameraZoom;
     public struct GeneralActions
     {
         private @PlayerInputs m_Wrapper;
@@ -207,6 +261,7 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
         public InputAction @Camera => m_Wrapper.m_General_Camera;
         public InputAction @SelectPosition => m_Wrapper.m_General_SelectPosition;
         public InputAction @Select => m_Wrapper.m_General_Select;
+        public InputAction @CameraZoom => m_Wrapper.m_General_CameraZoom;
         public InputActionMap Get() { return m_Wrapper.m_General; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -225,6 +280,9 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                 @Select.started -= m_Wrapper.m_GeneralActionsCallbackInterface.OnSelect;
                 @Select.performed -= m_Wrapper.m_GeneralActionsCallbackInterface.OnSelect;
                 @Select.canceled -= m_Wrapper.m_GeneralActionsCallbackInterface.OnSelect;
+                @CameraZoom.started -= m_Wrapper.m_GeneralActionsCallbackInterface.OnCameraZoom;
+                @CameraZoom.performed -= m_Wrapper.m_GeneralActionsCallbackInterface.OnCameraZoom;
+                @CameraZoom.canceled -= m_Wrapper.m_GeneralActionsCallbackInterface.OnCameraZoom;
             }
             m_Wrapper.m_GeneralActionsCallbackInterface = instance;
             if (instance != null)
@@ -238,6 +296,9 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                 @Select.started += instance.OnSelect;
                 @Select.performed += instance.OnSelect;
                 @Select.canceled += instance.OnSelect;
+                @CameraZoom.started += instance.OnCameraZoom;
+                @CameraZoom.performed += instance.OnCameraZoom;
+                @CameraZoom.canceled += instance.OnCameraZoom;
             }
         }
     }
@@ -256,5 +317,6 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
         void OnCamera(InputAction.CallbackContext context);
         void OnSelectPosition(InputAction.CallbackContext context);
         void OnSelect(InputAction.CallbackContext context);
+        void OnCameraZoom(InputAction.CallbackContext context);
     }
 }

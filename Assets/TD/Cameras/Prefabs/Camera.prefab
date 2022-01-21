@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8533936205329253221}
   - component: {fileID: 8533936205329253220}
   - component: {fileID: 8533936205329253219}
+  - component: {fileID: 3285661100853649861}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -27,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8533936205329253223}
   m_LocalRotation: {x: 0.56316966, y: -0, z: -0, w: 0.82634133}
-  m_LocalPosition: {x: -14.43, y: 68.6, z: -29.3}
+  m_LocalPosition: {x: -14.43, y: 58.31, z: -15.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8533936205771668871}
@@ -118,6 +119,38 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3285661100853649861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8533936205329253223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!1 &8533936205771668870
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,7 +253,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8533936206350999760}
   m_LocalRotation: {x: 0.56316966, y: -0, z: -0, w: 0.82634133}
-  m_LocalPosition: {x: -14.43, y: 68.6, z: -29.3}
+  m_LocalPosition: {x: -14.43, y: 58.31, z: -15.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8533936206207871059}
@@ -248,7 +281,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
-    FieldOfView: 40
+    FieldOfView: 45
     OrthographicSize: 5
     NearClipPlane: 0.1
     FarClipPlane: 5000
@@ -276,6 +309,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panSpeed: 40
   boundsCollider: {fileID: 8533936206821051043}
+  maxZoom: 40
+  minZoom: 0
+  zoomSensitivity: 1
+  camColA: {fileID: 0}
+  camColB: {fileID: 0}
 --- !u!1 &8533936206821051042
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,7 +324,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8533936206821051040}
   - component: {fileID: 8533936206821051043}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CameraConfiner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -301,7 +339,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8533936206821051042}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 33.299995, z: 0}
+  m_LocalPosition: {x: -17.44, y: 33.299995, z: 21.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8533936205771668871}
@@ -318,5 +356,5 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 69.26152, y: 100, z: 63.56214}
-  m_Center: {x: -2.8692398, y: 0, z: -5.7189293}
+  m_Size: {x: 7, y: 100, z: 10.888828}
+  m_Center: {x: -0.6638808, y: 0, z: -37.029465}

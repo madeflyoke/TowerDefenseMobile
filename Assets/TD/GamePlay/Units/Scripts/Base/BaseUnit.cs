@@ -25,8 +25,7 @@ namespace TD.GamePlay.Units
 
         private void Awake()
         {
-            pathFollower = GetComponent<PathFollower>();   
-            pathFollower.pathCreator = FindObjectOfType<PathCreator>();    
+            pathFollower = GetComponent<PathFollower>();     
             pathFollower.speed *= speedMultiplier;
             movementSpeed = pathFollower.speed;
             healthBar = GetComponentInChildren<HealthBar>();
