@@ -36,11 +36,6 @@ namespace TD.GamePlay.Towers
                 }
             }
         }
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.black;
-            Gizmos.DrawSphere(transform.position, baseTower.AttackRange);
-        }
 
         private void OnTriggerExit(Collider other)
         {
@@ -94,7 +89,6 @@ namespace TD.GamePlay.Towers
                 else
                     closest = distance < closestDistance ? colliders[i] : closest;
             }
-            Debug.Log("CLOSEST " + closest);
             return closest.GetComponent<BaseUnit>();
         }
     }

@@ -30,16 +30,16 @@ namespace TD.GamePlay.Towers
             proj.transform.DOMove(CorrectShot(attackPower), 1 / attackPower).SetEase(Ease.Linear)
                 .OnComplete(() =>
                 {
-                    Collider[] colliders = Physics.OverlapSphere(proj.transform.position, splashHitRadius, 1 << 6);
-                    foreach (Collider collider in colliders)
-                    {
-                        if (collider.gameObject.activeInHierarchy)
-                        {
-                            collider.gameObject.GetComponent<BaseUnit>().GetDamage(damage);
-                        }
-                    }    
+                    //Collider[] colliders = Physics.OverlapSphere(proj.transform.position, splashHitRadius, 1 << 6);
+                    //foreach (Collider collider in colliders)
+                    //{
+                    //    if (collider.gameObject.activeInHierarchy)
+                    //    {
+                    //        collider.gameObject.GetComponent<BaseUnit>().GetDamage(damage);
+                    //    }
+                    //}    
                     proj.SetActive(false);
-                    //if (currentTarget != null) currentTarget.GetDamage(damage);
+                    if (currentTarget != null) currentTarget.GetDamage(damage);
                 });
         }
 

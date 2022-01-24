@@ -62,7 +62,7 @@ namespace TD.GamePlay.Managers
             }
             var pool = poolDict[prefab];
             GameObject poolableObject = pool.Count>0&&!pool.Peek().activeInHierarchy?pool.Dequeue()
-                                                                         :AddPoolObject(prefab, pool);
+                                                                         :AddPoolObject(prefab);
 
             poolableObject.transform.position = pos;
             poolableObject.SetActive(true);
@@ -70,9 +70,9 @@ namespace TD.GamePlay.Managers
             return poolableObject;
         }
 
-        private GameObject AddPoolObject(GameObject prefab, Queue<GameObject> pool)
+        private GameObject AddPoolObject(GameObject prefab)
         {
-            GameObject go = Instantiate(prefab, transform.position, Quaternion.identity,transform);
+            GameObject go = diContainer.InstantiatePrefab(prefab.gameObject, transform.position, Quaternion.identity, transform); 
             go.SetActive(false);
             return go;
         }

@@ -7,20 +7,29 @@ namespace TD.Cameras
     public class CameraController : MonoBehaviour
     {
         [SerializeField] private float panSpeed;
-        [SerializeField] private float maxZoom;
-        [SerializeField] private float minZoom;
+        [SerializeField] private float maxZoomHeight;
+        [SerializeField] private float minZoomHeight;
+        [Range(0f, 1f)]
+        [SerializeField] private float startTilting;
+        [SerializeField] private float maxZoomTilt;
+        [SerializeField] private float minZoomTilt;
         [SerializeField] private float zoomSensitivity;
         [SerializeField] private BoxCollider cameraViewCollider;
         [SerializeField] private BoxCollider cameraBoundsCollider;
         private PlayerInputs inputs;
         private CinemachineVirtualCamera cam;
         private Vector3 centerPosition;
-
+        private CinemachineCameraOffset camOffset;
+        private CinemachineRecomposer camRecomposer;
+        private Vector3 standardViewColliderSize;
         private void Awake()
         {
             cam = GetComponent<CinemachineVirtualCamera>();
+            camOffset = GetComponent<CinemachineCameraOffset>();
+            camRecomposer = GetComponent<CinemachineRecomposer>();
             inputs = new PlayerInputs();
             centerPosition = transform.position;
+            standardViewColliderSize = cameraViewCollider.size;
         }
 
         private void OnEnable()
@@ -67,15 +76,38 @@ namespace TD.Cameras
 
         private void ZoomCamera(float zoomValue)
         {
-            float prevZoom = cam.m_Lens.FieldOfView;
-            cam.m_Lens.FieldOfView = Mathf.Clamp(cam.m_Lens.FieldOfView + (-zoomValue * zoomSensitivity * Time.deltaTime),
-                minZoom, maxZoom);
-            float newZoom = cam.m_Lens.FieldOfView;
-            if (zoomValue < 0 && prevZoom != newZoom)
+            float zoomOffsetZ = Mathf.Clamp(camOffset.m_Offset.z + (zoomValue * zoomSensitivity * Time.deltaTime), minZoomHeight, maxZoomHeight);
+
+            camOffset.m_Offset = new Vector3(camOffset.m_Offset.x, camOffset.m_Offset.y, zoomOffsetZ);
+
+            if (camOffset.m_Offset.z > maxZoomHeight * startTilting)
             {
-                transform.position = Vector3.Lerp(transform.position, centerPosition, zoomSensitivity/10 * Time.deltaTime); /*Vector3.MoveTowards(transform.position, centerPosition, zoomValue * zoomSensitivity * Time.deltaTime);*/
+                float zoomRecomposer = Mathf.Clamp(camRecomposer.m_Tilt +
+                    (-zoomValue * zoomSensitivity * Time.deltaTime), minZoomTilt, maxZoomTilt);
+                camRecomposer.m_Tilt = zoomRecomposer;
             }
-            cameraViewCollider.size *= newZoom / prevZoom;
+
+            //float prevZoom = cam.m_Lens.FieldOfView;
+            //cam.m_Lens.FieldOfView = Mathf.Clamp(cam.m_Lens.FieldOfView + (-zoomValue * zoomSensitivity * Time.deltaTime),
+            //    minZoom, maxZoom);
+            //float newZoom = cam.m_Lens.FieldOfView;    ////reserve method
+
+            if (zoomValue < 0)
+            {
+                transform.position = Vector3.Lerp(transform.position, centerPosition, zoomSensitivity / 10 * Time.deltaTime);
+                if (cameraViewCollider.size.x <= standardViewColliderSize.x)
+                {
+                    cameraViewCollider.size += (cameraViewCollider.size * (-zoomValue / 100));
+                }
+            }
+            else if(zoomValue>0)
+            {
+                if (cameraViewCollider.size.x >= (standardViewColliderSize.x / 3))
+                {
+                    cameraViewCollider.size -= (cameraViewCollider.size * (zoomValue / 100));
+                }
+            }
+
         }
     }
 }

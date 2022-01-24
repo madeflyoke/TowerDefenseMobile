@@ -107,8 +107,8 @@ MonoBehaviour:
   damage: 40
   attackRange: 10
   attackSpeed: 0.5
-  cost: 5
-  attackPower: 1.5
+  cost: 7
+  attackPower: 1.2
 --- !u!1 &2054627060394885797
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,7 +215,7 @@ Transform:
   m_GameObject: {fileID: 8113522980617416111}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.05, y: 1.05, z: 1.05}
   m_Children: []
   m_Father: {fileID: 2054627059904948766}
   m_RootOrder: 2
@@ -296,7 +296,7 @@ Transform:
   m_GameObject: {fileID: 8114214895432391717}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: -3.38, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.05, y: 1.05, z: 1.05}
   m_Children:
   - {fileID: 2054627060630902210}
   m_Father: {fileID: 2054627060394885796}
