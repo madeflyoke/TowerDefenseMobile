@@ -1,11 +1,14 @@
 using UnityEngine;
 using Cinemachine;
-using Cysharp.Threading.Tasks;
+using Zenject;
+using TD.GUI;
 
 namespace TD.Cameras
 {
     public class CameraController : MonoBehaviour
     {
+        [Inject] private GUIController guiController;
+
         [SerializeField] private float panSpeed;
         [SerializeField] private float maxZoomHeight;
         [SerializeField] private float minZoomHeight;
@@ -59,6 +62,7 @@ namespace TD.Cameras
 
         private void MoveCamera(Vector2 direction)
         {
+            guiController.gamePlayScreen.buildMenuController.HideMenu();
             if (direction.x < 0 && cameraViewCollider.bounds.min.x <= cameraBoundsCollider.bounds.min.x ||
             direction.x > 0 && cameraViewCollider.bounds.max.x >= cameraBoundsCollider.bounds.max.x)
             {
@@ -76,6 +80,7 @@ namespace TD.Cameras
 
         private void ZoomCamera(float zoomValue)
         {
+            guiController.gamePlayScreen.buildMenuController.HideMenu();
             float zoomOffsetZ = Mathf.Clamp(camOffset.m_Offset.z + (zoomValue * zoomSensitivity * Time.deltaTime), minZoomHeight, maxZoomHeight);
 
             camOffset.m_Offset = new Vector3(camOffset.m_Offset.x, camOffset.m_Offset.y, zoomOffsetZ);

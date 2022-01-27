@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace TD.GamePlay.HomeBuilding
 {
+    [RequireComponent(typeof(BoxCollider))]
     public class HomeBase : MonoBehaviour
     {
         public event Action homeBaseDestroyedEvent;
@@ -32,7 +33,7 @@ namespace TD.GamePlay.HomeBuilding
             {
                 BaseUnit enemy = other.gameObject.GetComponent<BaseUnit>();
                 GetDamage(enemy.Damage);
-                enemy.GetDamage(enemy.MaxHealthPoints);
+                enemy.gameObject.SetActive(false);
             }
         }
     }

@@ -23,6 +23,15 @@ namespace TD.GamePlay.Managers
             homeBase = FindObjectOfType<HomeBase>();
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                EndGameLogic();
+            }
+            
+        }
+
         private void OnEnable()
         {
             homeBase.homeBaseDestroyedEvent += EndGameLogic;

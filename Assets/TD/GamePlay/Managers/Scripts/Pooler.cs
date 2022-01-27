@@ -1,14 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
-using TD.GamePlay.Units;
 using Zenject;
 
 namespace TD.GamePlay.Managers
 {
     public class Pooler : MonoBehaviour
     {
-        [Inject] private GameManager gameManager;
         [Inject] private DiContainer diContainer;
 
         [SerializeField] private List<Poolable> poolObjects;
@@ -18,24 +16,6 @@ namespace TD.GamePlay.Managers
         {
             poolDict = new Dictionary<GameObject, Queue<GameObject>>();
             Spawn();
-        }
-
-        private void OnEnable()
-        {
-            gameManager.endGameEvent += EndGameLogic;
-        }
-        private void OnDisable()
-        {
-            gameManager.endGameEvent -= EndGameLogic;
-        }
-
-        private void EndGameLogic()
-        {
-            BaseUnit[] units = GetComponentsInChildren<BaseUnit>();
-            foreach (BaseUnit unit in units)
-            {
-                unit.pathFollower.canMove = false;
-            }
         }
 
         private void Spawn()

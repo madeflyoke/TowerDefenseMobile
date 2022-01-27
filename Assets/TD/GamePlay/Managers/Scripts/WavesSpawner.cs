@@ -29,7 +29,7 @@ namespace TD.GamePlay.Managers
 
         private void Awake()
         {
-            cancellationToken = new CancellationTokenSource();
+            cancellationToken = new CancellationTokenSource();          
         }
 
         private void Update()
@@ -37,23 +37,28 @@ namespace TD.GamePlay.Managers
             if (Input.GetKeyDown(KeyCode.G))
             {
                 for (int i = 0; i < pathWaves.Count; i++)
-                {                
+                {
                     PushEnemy(pathWaves[i]);
                 }             
             }
             if (Input.GetKeyDown(KeyCode.Y))
             {
-                cancellationToken.Cancel();
+                cancellationToken.Cancel();            
             }
         }
 
         private void OnEnable()
         {
-            gameManager.endGameEvent += cancellationToken.Cancel;
+            gameManager.endGameEvent += StopWaves;
         }
         private void OnDisable()
         {
-            gameManager.endGameEvent -= cancellationToken.Cancel;
+            gameManager.endGameEvent -= StopWaves;
+        }
+
+        private void StopWaves()
+        {
+            cancellationToken.Cancel();
         }
 
         private async void PushEnemy(PathWaves pathWaves)
@@ -77,6 +82,7 @@ namespace TD.GamePlay.Managers
         private async void NextWaveSpawn(PathWaves pathWaves)
         {
             pathWaves.currentWaveIndex++;
+          
             if (pathWaves.currentWaveIndex > pathWaves.waves.Count - 1)
             {
                 Debug.Log("END WAVES");

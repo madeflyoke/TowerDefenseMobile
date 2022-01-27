@@ -1,6 +1,5 @@
 using UnityEngine;
 using PathCreation.Examples;
-using PathCreation;
 using Zenject;
 using TD.GamePlay.Managers;
 
@@ -9,11 +8,13 @@ namespace TD.GamePlay.Units
     public abstract class BaseUnit : MonoBehaviour
     {
         [Inject] private GameManager gameManager;
+        [Inject] private Pooler pooler;
 
         [SerializeField] protected float speedMultiplier;
         [SerializeField] protected float maxHealthPoints;
         [SerializeField] protected float damage;
         [SerializeField] protected int killReward;
+        [SerializeField] protected GameObject deathEffect;
         public float MovementSpeed { get => movementSpeed; }
         public float Damage { get => damage; }
         public PathFollower pathFollower { get; private set; }
@@ -22,20 +23,32 @@ namespace TD.GamePlay.Units
         private float currenHealthPoints;
         private float movementSpeed;
         private HealthBar healthBar;
+        private Animator animator;
 
         private void Awake()
         {
-            pathFollower = GetComponent<PathFollower>();     
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            pathFollower = GetComponent<PathFollower>();
             pathFollower.speed *= speedMultiplier;
             movementSpeed = pathFollower.speed;
             healthBar = GetComponentInChildren<HealthBar>();
             healthBar.Initialize();
             healthBar.gameObject.SetActive(false);
+            animator = GetComponent<Animator>();
         }
 
+        private void OnEnable()
+        {
+            gameManager.endGameEvent += StopUnit;
+        }
         private void OnDisable()
         {
             ResetValues();
+            gameManager.endGameEvent -= StopUnit;
         }
 
         public virtual void Move()        
@@ -58,6 +71,7 @@ namespace TD.GamePlay.Units
         protected virtual void Die()
         {
             gameManager.AddCurrency(killReward);
+            pooler.GetObjectFromPool(deathEffect, transform.position);
             gameObject.SetActive(false);
         }
 
@@ -66,6 +80,12 @@ namespace TD.GamePlay.Units
             pathFollower.ResetPath();
             currenHealthPoints = maxHealthPoints;
             healthBar.ResetHealthBar();
+        }
+
+        protected void StopUnit()
+        {
+            animator.enabled = false;
+            pathFollower.canMove = false;
         }
     }
 }

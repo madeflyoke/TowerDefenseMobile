@@ -1,12 +1,15 @@
 using UnityEngine;
 using Zenject;
 using TD.GamePlay.Managers;
+using System;
+using DG.Tweening;
 
 namespace TD.GamePlay.Towers
 {
     public abstract class BaseTower : MonoBehaviour
     {
         [Inject] private Pooler pooler;
+        [Inject] private GameManager gameManager;
 
         [SerializeField] private BaseTower nextTowerLevel;
         [SerializeField] protected float damage;
@@ -22,7 +25,7 @@ namespace TD.GamePlay.Towers
         public float Damage { get => damage; }
         public TowerAttacker Attacker { get; private set; }
         public TowerTargetter Targeter { get; private set; }
-        public BaseTower NextTowerLevel { get=>nextTowerLevel;}
+        public BaseTower NextTowerLevel { get => nextTowerLevel; }
 
 
         private void Awake()
@@ -31,6 +34,25 @@ namespace TD.GamePlay.Towers
             Targeter = GetComponentInChildren<TowerTargetter>();
             Targeter.Initialize(this, Attacker);
             Attacker.Initialize(pooler);
+        }
+
+        private void OnEnable()
+        {
+            gameManager.endGameEvent += StopTowerAttack;
+        }
+        private void OnDisable()
+        {
+            gameManager.endGameEvent -= StopTowerAttack;
+        }
+
+        private void StopTowerAttack()
+        {
+            Targeter.isSearching = false;
+            Targeter.enabled = false;
+
+            Attacker.isAttack = false;
+            Attacker.shootingTween.Kill();
+            Attacker.enabled = false;
         }
 
         private void Start()
@@ -48,5 +70,6 @@ namespace TD.GamePlay.Towers
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(gameObject.transform.position, attackRange);
         }
+
     }
 }

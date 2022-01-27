@@ -327,7 +327,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 9129345121016502870, guid: abcfdbdfb3569324588a6994292442fa, type: 3}
   attackPoint: {fileID: 8552388285617481909}
-  splashHitRadius: 1
+  splashHitRadius: 0.2
   turret: {fileID: 487730012716674889}
   turretRotationSpeed: 10
 --- !u!1 &8552388286334916461
@@ -377,8 +377,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextTowerLevel: {fileID: 2054627059904948765, guid: b7af9f4cd3fd9e04fac3c9789b728316, type: 3}
-  damage: 25
+  damage: 20
   attackRange: 8
-  attackSpeed: 0.5
-  cost: 5
+  attackSpeed: 0.6
+  cost: 35
   attackPower: 1

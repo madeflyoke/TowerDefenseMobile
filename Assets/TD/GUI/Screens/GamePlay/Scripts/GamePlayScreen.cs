@@ -8,7 +8,7 @@ namespace TD.GUI.Screens.GamePlay
     public class GamePlayScreen : BaseScreen
     {
         private InputsController inputsController;
-        private BuildMenuController buildMenuController;
+        public BuildMenuController buildMenuController { get; private set; }
         private HUDController hudController;
 
         private void Awake()
