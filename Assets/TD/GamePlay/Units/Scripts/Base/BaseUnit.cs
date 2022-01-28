@@ -15,6 +15,7 @@ namespace TD.GamePlay.Units
         [SerializeField] protected float damage;
         [SerializeField] protected int killReward;
         [SerializeField] protected GameObject deathEffect;
+
         public float MovementSpeed { get => movementSpeed; }
         public float Damage { get => damage; }
         public PathFollower pathFollower { get; private set; }

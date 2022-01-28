@@ -13,20 +13,26 @@ namespace TD.GamePlay.Towers
         [SerializeField] private float splashHitRadius;
         [SerializeField] private Transform turret;
         [SerializeField] private float turretRotationSpeed;
+        [SerializeField] private ParticleSystem muzzleFlashEffect;
+        [SerializeField] private GameObject projectileExplosionEffect;
         public bool isAttack { get; set; }
         public BaseUnit currentTarget { get; private set; }
+        public Tween shootingTween { get; private set; }
 
         private float prevAttackTime;
         private Pooler pooler;
-        public Tween shootingTween { get; private set; }
+        private ParticleSystem muzzleFlash;
 
         public void Initialize(Pooler pooler)
         {
             this.pooler = pooler;
+            muzzleFlash = Instantiate( 
+                muzzleFlashEffect, attackPoint.position, muzzleFlashEffect.transform.rotation, attackPoint);      
         }
 
         private void Shoot(float attackPower, float damage)
         {
+            muzzleFlash.Play();
             GameObject proj = pooler.GetObjectFromPool(projectilePrefab, attackPoint.position);
             shootingTween = proj.transform.DOMove(CorrectShot(attackPower), 1 / attackPower).SetEase(Ease.Linear)
                 .OnComplete(() =>
@@ -39,6 +45,7 @@ namespace TD.GamePlay.Towers
                             collider.gameObject.GetComponent<BaseUnit>().GetDamage(damage);
                         }
                     }
+                    pooler.GetObjectFromPool(projectileExplosionEffect, proj.transform.position);
                     proj.SetActive(false);
 
                 }).OnKill(()=>proj.SetActive(false));

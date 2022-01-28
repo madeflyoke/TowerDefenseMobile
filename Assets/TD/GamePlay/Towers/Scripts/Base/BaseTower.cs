@@ -1,7 +1,6 @@
 using UnityEngine;
 using Zenject;
 using TD.GamePlay.Managers;
-using System;
 using DG.Tweening;
 
 namespace TD.GamePlay.Towers
@@ -27,7 +26,6 @@ namespace TD.GamePlay.Towers
         public TowerTargetter Targeter { get; private set; }
         public BaseTower NextTowerLevel { get => nextTowerLevel; }
 
-
         private void Awake()
         {
             Attacker = GetComponentInChildren<TowerAttacker>();
@@ -39,6 +37,7 @@ namespace TD.GamePlay.Towers
         private void OnEnable()
         {
             gameManager.endGameEvent += StopTowerAttack;
+            transform.DOPunchScale(Vector3.one * 0.5f, 0.2f);
         }
         private void OnDisable()
         {
@@ -62,7 +61,7 @@ namespace TD.GamePlay.Towers
 
         public void DestroyTower()
         {
-            Destroy(gameObject);
+            transform.DOScale(0f, 0.15f).OnComplete(() => Destroy(gameObject));
         }
 
         protected void OnDrawGizmos()

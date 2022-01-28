@@ -1,6 +1,7 @@
 using TD.GamePlay.Units;
 using System;
 using UnityEngine;
+using DG.Tweening;
 
 namespace TD.GamePlay.HomeBuilding
 {
@@ -17,14 +18,23 @@ namespace TD.GamePlay.HomeBuilding
             currentHealthPoints = maxHealthPoints;
         }
 
-        private void GetDamage(float damage)
+        private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                GetDamage(1);
+            }
+        }
+        private void GetDamage(float damage)
+        {    
             currentHealthPoints -= damage;
+            transform.DOShakePosition(0.3f,0.2f);
             if (currentHealthPoints<=0)
             {
                 homeBaseDestroyedEvent?.Invoke();
                 return;
             }
+
         }
 
         private void OnTriggerEnter(Collider other)

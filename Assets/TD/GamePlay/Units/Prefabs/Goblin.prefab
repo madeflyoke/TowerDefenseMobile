@@ -568,6 +568,7 @@ MonoBehaviour:
   damage: 10
   killReward: 7
   deathEffect: {fileID: 8338393830292078250, guid: 205af32d64ed2204bbada6f65e807817, type: 3}
+  deathEffectSizeMultiplier: 4
 --- !u!1 &1300070071406548
 GameObject:
   m_ObjectHideFlags: 0

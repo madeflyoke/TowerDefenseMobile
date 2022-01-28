@@ -26198,14 +26198,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6337735491512264672, guid: 8ad461c57d5735f4b8e7ca61b011d501, type: 3}
-      propertyPath: poolObjects.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6337735491512264672, guid: 8ad461c57d5735f4b8e7ca61b011d501, type: 3}
-      propertyPath: poolObjects.Array.data[4]
-      value: 
-      objectReference: {fileID: 6100993183791355460, guid: c6cfc32748fb5004aa11a1be074b5c58, type: 3}
     - target: {fileID: 6337735491512264673, guid: 8ad461c57d5735f4b8e7ca61b011d501, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -35512,17 +35504,17 @@ MonoBehaviour:
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
     spawnDelay: 0
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 3
+    spawnDelay: 2
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 3
+    spawnDelay: 2
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 3
+    spawnDelay: 2
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 3
+    spawnDelay: 2
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 3
+    spawnDelay: 2
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 3
+    spawnDelay: 2
 --- !u!1001 &863043182
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -74515,19 +74507,19 @@ MonoBehaviour:
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
     spawnDelay: 2
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 2
+    spawnDelay: 1
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 2
+    spawnDelay: 1
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 2
+    spawnDelay: 1
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 2
+    spawnDelay: 1
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 2
+    spawnDelay: 1
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 2
+    spawnDelay: 1
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 2
+    spawnDelay: 1
 --- !u!4 &1782799220 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4482437886289408, guid: 1d9cc67243350f643b8c562ed0503c49, type: 3}
@@ -74550,7 +74542,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4331396267190309302, guid: 4ac8d5a3dd0ae754c9efba3abeb8061a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
-      value: 10
+      value: 99999
       objectReference: {fileID: 0}
     - target: {fileID: 4331396267190309303, guid: 4ac8d5a3dd0ae754c9efba3abeb8061a, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -76819,19 +76811,19 @@ MonoBehaviour:
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
     spawnDelay: 2
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 2
+    spawnDelay: 1
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 2
+    spawnDelay: 1
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 2
+    spawnDelay: 1
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 2
+    spawnDelay: 1
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 2
+    spawnDelay: 1
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 2
+    spawnDelay: 1
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
-    spawnDelay: 2
+    spawnDelay: 1
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
     spawnDelay: 2
   - prefab: {fileID: 1258991314359982, guid: 3749b9edee740c44ea7455a4fa1b7382, type: 3}
@@ -82765,12 +82757,12 @@ Transform:
   - {fileID: 1008452924}
   - {fileID: 1773288742}
   - {fileID: 2072133081}
-  - {fileID: 1450753941}
   - {fileID: 613517246}
   - {fileID: 1797554462}
   - {fileID: 1465053967}
   - {fileID: 1710968092}
   - {fileID: 1797336485}
+  - {fileID: 1450753941}
   - {fileID: 1641055370}
   - {fileID: 1376213631}
   - {fileID: 810411296}
@@ -90791,7 +90783,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RenderShadows: 1
+  m_RenderShadows: 0
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
@@ -91046,7 +91038,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7075647652722343238, guid: fe840bc95ea0f4a4e84f484aa0ee13a9, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 4294967295
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7600405608489494524, guid: fe840bc95ea0f4a4e84f484aa0ee13a9, type: 3}
       propertyPath: m_RootOrder

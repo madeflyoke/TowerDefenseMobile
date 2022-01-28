@@ -153,11 +153,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d2500e59941e114383e39af200e5ff1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 9129345121016502870, guid: abcfdbdfb3569324588a6994292442fa, type: 3}
+  projectilePrefab: {fileID: 3599747319752325643, guid: 360f6627e5a530140849daa8c837fd36, type: 3}
   attackPoint: {fileID: 2054627060630902210}
   splashHitRadius: 0.5
   turret: {fileID: 8111723654171166157}
   turretRotationSpeed: 10
+  muzzleFlashEffect: {fileID: 19896092, guid: df6ebb501d275ef46bfba66b530c1566, type: 3}
+  projectileExplosionEffect: {fileID: 130848, guid: aaea797884454c64c81154a88c5d679a, type: 3}
 --- !u!1 &2054627060630902211
 GameObject:
   m_ObjectHideFlags: 0
