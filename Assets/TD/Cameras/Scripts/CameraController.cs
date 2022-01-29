@@ -85,13 +85,6 @@ namespace TD.Cameras
 
             camOffset.m_Offset = new Vector3(camOffset.m_Offset.x, camOffset.m_Offset.y, zoomOffsetZ);
 
-            if (camOffset.m_Offset.z > maxZoomHeight * startTilting)
-            {
-                float zoomRecomposer = Mathf.Clamp(camRecomposer.m_Tilt +
-                    (-zoomValue * zoomSensitivity * Time.deltaTime), minZoomTilt, maxZoomTilt);
-                camRecomposer.m_Tilt = zoomRecomposer;
-            }
-
             //float prevZoom = cam.m_Lens.FieldOfView;
             //cam.m_Lens.FieldOfView = Mathf.Clamp(cam.m_Lens.FieldOfView + (-zoomValue * zoomSensitivity * Time.deltaTime),
             //    minZoom, maxZoom);
@@ -106,6 +99,9 @@ namespace TD.Cameras
                 {
                     cameraViewCollider.size = standardViewColliderSize;
                 }
+                float zoomRecomposer = Mathf.Clamp(camRecomposer.m_Tilt +
+                    (-zoomValue * zoomSensitivity * Time.deltaTime), minZoomTilt, maxZoomTilt);
+                camRecomposer.m_Tilt = zoomRecomposer;
             }
             else if (zoomValue > 0)
             {
@@ -113,6 +109,12 @@ namespace TD.Cameras
                 if (cameraViewCollider.size.x < (standardViewColliderSize.x / 3))
                 {
                     cameraViewCollider.size = standardViewColliderSize/3;
+                }
+                if (camOffset.m_Offset.z > maxZoomHeight * startTilting)
+                {
+                    float zoomRecomposer = Mathf.Clamp(camRecomposer.m_Tilt +
+                    (-zoomValue * zoomSensitivity * Time.deltaTime), minZoomTilt, maxZoomTilt);
+                    camRecomposer.m_Tilt = zoomRecomposer;
                 }
             }
 
