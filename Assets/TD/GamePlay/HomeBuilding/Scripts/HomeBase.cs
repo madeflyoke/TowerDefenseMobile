@@ -8,13 +8,32 @@ namespace TD.GamePlay.HomeBuilding
     [RequireComponent(typeof(BoxCollider))]
     public class HomeBase : MonoBehaviour
     {
+        private enum DamageState
+        {
+            None,
+            First,
+            Second
+        }
+
         public event Action homeBaseDestroyedEvent;
 
         [SerializeField] private float maxHealthPoints;
+        [SerializeField] private ParticleSystem damageEffect;
+        [SerializeField] private ParticleSystem deathEffect;
+        [SerializeField] private ParticleSystem firstStageDamageEffect;
+        [SerializeField] private ParticleSystem secondStageDamageEffect;
+        [Range(1, 100f)]
+        [SerializeField] private int firstStageDamagePercentHP;
+        [Range(1, 100f)]
+        [SerializeField] private int secondStageDamagePercentHP;
         private float currentHealthPoints;
+        private DamageState currentDamageState;
 
         private void Awake()
         {
+            currentDamageState = DamageState.None;
+            firstStageDamageEffect.gameObject.SetActive(false);
+            secondStageDamageEffect.gameObject.SetActive(false);
             currentHealthPoints = maxHealthPoints;
         }
 
@@ -22,15 +41,32 @@ namespace TD.GamePlay.HomeBuilding
         {
             if (Input.GetKeyDown(KeyCode.O))
             {
-                GetDamage(1);
+                GetDamage(17);
             }
         }
         private void GetDamage(float damage)
         {    
             currentHealthPoints -= damage;
-            transform.DOShakePosition(0.3f,0.2f);
+            damageEffect.Play();
+
+            if (currentHealthPoints<=maxHealthPoints*firstStageDamagePercentHP/100
+                &&currentDamageState==DamageState.None)
+            {
+                firstStageDamageEffect.gameObject.SetActive(true);
+                firstStageDamageEffect.Play();
+                currentDamageState = DamageState.First;
+            }
+            else if (currentHealthPoints<=maxHealthPoints*secondStageDamagePercentHP/100
+                &&currentDamageState==DamageState.First)
+            {
+                secondStageDamageEffect.gameObject.SetActive(true);
+                secondStageDamageEffect.Play();
+                currentDamageState=DamageState.Second;
+            }
+
             if (currentHealthPoints<=0)
             {
+                deathEffect.Play();
                 homeBaseDestroyedEvent?.Invoke();
                 return;
             }

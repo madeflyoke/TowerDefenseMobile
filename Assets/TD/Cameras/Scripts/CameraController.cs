@@ -100,16 +100,19 @@ namespace TD.Cameras
             if (zoomValue < 0)
             {
                 transform.position = Vector3.Lerp(transform.position, centerPosition, zoomSensitivity / 10 * Time.deltaTime);
-                if (cameraViewCollider.size.x <= standardViewColliderSize.x)
+
+                cameraViewCollider.size += cameraViewCollider.size * (-zoomValue / 100);
+                if (cameraViewCollider.size.x > standardViewColliderSize.x)
                 {
-                    cameraViewCollider.size += (cameraViewCollider.size * (-zoomValue / 100));
+                    cameraViewCollider.size = standardViewColliderSize;
                 }
             }
-            else if(zoomValue>0)
+            else if (zoomValue > 0)
             {
-                if (cameraViewCollider.size.x >= (standardViewColliderSize.x / 3))
+                cameraViewCollider.size -= cameraViewCollider.size * (zoomValue / 100);
+                if (cameraViewCollider.size.x < (standardViewColliderSize.x / 3))
                 {
-                    cameraViewCollider.size -= (cameraViewCollider.size * (zoomValue / 100));
+                    cameraViewCollider.size = standardViewColliderSize/3;
                 }
             }
 
