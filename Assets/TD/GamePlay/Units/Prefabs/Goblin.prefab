@@ -446,7 +446,7 @@ GameObject:
   - component: {fileID: 4887270080479870}
   - component: {fileID: 95760122612387900}
   - component: {fileID: 8243328058363651010}
-  - component: {fileID: 135975656248482850}
+  - component: {fileID: 1901360952008142248}
   - component: {fileID: -357678768245796889}
   - component: {fileID: 8667537091073025956}
   - component: {fileID: -5116790200391531560}
@@ -509,8 +509,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!135 &135975656248482850
-SphereCollider:
+--- !u!136 &1901360952008142248
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -519,9 +519,10 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.65
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Radius: 0.24245903
+  m_Height: 1.3627033
+  m_Direction: 1
+  m_Center: {x: -0.011077347, y: 0.49864745, z: 0}
 --- !u!114 &-357678768245796889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -568,7 +569,6 @@ MonoBehaviour:
   damage: 10
   killReward: 7
   deathEffect: {fileID: 8338393830292078250, guid: 205af32d64ed2204bbada6f65e807817, type: 3}
-  deathEffectSizeMultiplier: 4
 --- !u!1 &1300070071406548
 GameObject:
   m_ObjectHideFlags: 0

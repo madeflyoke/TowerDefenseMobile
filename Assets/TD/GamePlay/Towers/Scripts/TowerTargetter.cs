@@ -8,12 +8,13 @@ namespace TD.GamePlay.Towers
     [RequireComponent(typeof(SphereCollider))]
     public class TowerTargetter : MonoBehaviour
     {
+        [SerializeField] private GameObject attackRangeCircle;
         public bool isSearching { get; set; }
         private SphereCollider attackRangeCollider;
         private BaseTower baseTower;
         private List<Collider> colliders;
         private TowerAttacker attacker;
-
+        public GameObject AttackRangeCircle { get=>attackRangeCircle;}
         public void Initialize(BaseTower baseTower, TowerAttacker towerAttacker)
         {
             this.baseTower = baseTower;
@@ -22,6 +23,8 @@ namespace TD.GamePlay.Towers
             attackRangeCollider = gameObject.GetComponent<SphereCollider>();
             attackRangeCollider.isTrigger = true;
             attackRangeCollider.radius = baseTower.AttackRange;
+            attackRangeCircle.transform.localScale *= baseTower.AttackRange / 5.1f; //circle sprite size coef 
+            attackRangeCircle.gameObject.SetActive(false);
         }
 
         private void Update() //if fps drop then Fixed!!!!!!

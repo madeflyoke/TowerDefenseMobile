@@ -34,13 +34,6 @@ namespace TD.GamePlay.Managers
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                for (int i = 0; i < pathWaves.Count; i++)
-                {
-                    PushEnemy(pathWaves[i]);
-                }             
-            }
             if (Input.GetKeyDown(KeyCode.Y))
             {
                 cancellationToken.Cancel();            
@@ -50,12 +43,21 @@ namespace TD.GamePlay.Managers
         private void OnEnable()
         {
             gameManager.endGameEvent += StopWaves;
+            gameManager.restartLevelEvent += StopWaves;
         }
         private void OnDisable()
         {
             gameManager.endGameEvent -= StopWaves;
+            gameManager.restartLevelEvent -= StopWaves;
         }
 
+        public void StartWaves()
+        {
+            for (int i = 0; i < pathWaves.Count; i++)
+            {
+                PushEnemy(pathWaves[i]);
+            }
+        }
         private void StopWaves()
         {
             cancellationToken.Cancel();

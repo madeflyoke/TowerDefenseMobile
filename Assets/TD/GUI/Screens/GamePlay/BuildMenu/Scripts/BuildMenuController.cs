@@ -1,9 +1,11 @@
+using Cinemachine;
 using TD.GamePlay.Managers;
 using TD.GamePlay.Towers;
 using TD.GamePlay.Towers.BuildSpots;
 using TD.GUI.Screens.GamePlay.BuildMenu.Buttons;
 using UnityEngine;
 using Zenject;
+using DG.Tweening;
 
 namespace TD.GUI.Screens.GamePlay.BuildMenu
 {
@@ -14,22 +16,25 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu
 
         [SerializeField] private Color enableCostColor;
         [SerializeField] private Color disableCostColor;
-
+        [SerializeField] private float maxBuildMenuSize;
         public Color EnableCostColor { get => enableCostColor; }
         public Color DisableCostColor { get => disableCostColor; }
         public GameObject CurrentTowerSpot { get; private set; }
         public BaseTower CurrentTower { get; private set; }
         public TowerSpotsContainer TowerSpotsContainer { get; private set; }
-       
+
+        private Vector3 standardScale;
         private Camera cam;
         private BuildingButton buildingButton;
         private UpgradeButton upgradeButton;
         private SellButton sellButton;
-        
-
+        private CinemachineCameraOffset virtualCamOffset;
         public void Initialize()
         {
+            standardScale = transform.localScale;
             cam = Camera.main;
+            virtualCamOffset = FindObjectOfType<CinemachineVirtualCamera>().gameObject
+                .GetComponent<CinemachineCameraOffset>();
             TowerSpotsContainer = new TowerSpotsContainer();
             buildingButton = GetComponentInChildren<BuildingButton>();
             upgradeButton = GetComponentInChildren<UpgradeButton>();
@@ -40,13 +45,17 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu
         public void SetMenu(GameObject towerSpot)
         {
             CurrentTowerSpot = towerSpot;
-            gameObject.transform.position = cam.WorldToScreenPoint(towerSpot.transform.position);
+            transform.localScale = transform.localScale*((maxBuildMenuSize-1f)*(virtualCamOffset.m_Offset.z)/40f)+standardScale;
+
             if (TowerSpotsContainer.SpotTowers.ContainsKey(towerSpot))
             {
                 TowerSpotsContainer.SpotTowers.TryGetValue(towerSpot, out BaseTower targetTower);
                 if (targetTower != null)
                 {
                     CurrentTower = targetTower;
+                    gameObject.transform.position = cam.WorldToScreenPoint(targetTower.transform.position + (Vector3.up * 2.5f));
+                    CurrentTower.transform.DOPunchScale(Vector3.one * 0.2f, 0.2f);
+                    CurrentTower.Targeter.AttackRangeCircle.SetActive(true);
                     SetUpgradeMenu();
                 }
                 else
@@ -58,22 +67,23 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu
             }
             else
             {
+                gameObject.transform.position = cam.WorldToScreenPoint(towerSpot.transform.position);
                 SetBuildMenu();
             }
         }
 
         private void SetBuildMenu() //tower
-        {                
+        {
             buildingButton.gameObject.SetActive(true);
             gameObject.SetActive(true);
         }
 
         private void SetUpgradeMenu()
         {
-            if (CurrentTower.NextTowerLevel!=null)
+            if (CurrentTower.NextTowerLevel != null)
             {
                 upgradeButton.gameObject.SetActive(true);
-            }      
+            }
             sellButton.gameObject.SetActive(true);
             gameObject.SetActive(true);
         }
@@ -81,10 +91,15 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu
         public void HideMenu()
         {
             CurrentTowerSpot = null;
-            CurrentTower = null;
+            if (CurrentTower!=null)
+            {
+                CurrentTower.Targeter.AttackRangeCircle.SetActive(false);
+                CurrentTower = null;
+            }      
             upgradeButton.gameObject.SetActive(false);
             buildingButton.gameObject.SetActive(false);
             sellButton.gameObject.SetActive(false);
+            transform.localScale = standardScale;
             gameObject.SetActive(false);
         }
     }

@@ -1,14 +1,14 @@
 using UnityEngine;
 using System;
 using TD.GamePlay.HomeBuilding;
-using PathCreation;
-
+using UnityEngine.SceneManagement;
 namespace TD.GamePlay.Managers
 {
     public class GameManager : MonoBehaviour
     {
         public event Action<int> currencyChangedEvent;
         public event Action endGameEvent;
+        public event Action restartLevelEvent;
 
         [SerializeField] private int startCurrencyAmount;
         [SerializeField] private float sellMultiplier;
@@ -28,8 +28,7 @@ namespace TD.GamePlay.Managers
             if (Input.GetKeyDown(KeyCode.S))
             {
                 EndGameLogic();
-            }
-            
+            }            
         }
 
         private void OnEnable()
@@ -39,6 +38,15 @@ namespace TD.GamePlay.Managers
         private void OnDisable()
         {
             homeBase.homeBaseDestroyedEvent -= EndGameLogic;
+        }
+
+        public void ResetLevel()
+        {
+            if (SceneManager.GetActiveScene().buildIndex!=10) //set 0 index to main menu!!!
+            {            
+                SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+                restartLevelEvent?.Invoke();
+            }        
         }
 
         private void EndGameLogic()

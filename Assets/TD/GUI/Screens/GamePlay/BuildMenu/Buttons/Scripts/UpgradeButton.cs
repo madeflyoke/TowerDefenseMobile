@@ -1,12 +1,13 @@
 using TD.GamePlay.Towers;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
 {
     public class UpgradeButton : BaseButton
     {
-        [SerializeField] private Text costField;
+        [SerializeField] private TMP_Text costField;
         private BuildMenuController buildMenu;
         private bool canUpgrade;
 

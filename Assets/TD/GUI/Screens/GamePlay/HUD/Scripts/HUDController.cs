@@ -2,6 +2,7 @@ using TD.GamePlay.Managers;
 using UnityEngine;
 using Zenject;
 using UnityEngine.UI;
+using TMPro;
 
 namespace TD.GUI.Screens.GamePlay.HUD
 {
@@ -9,7 +10,7 @@ namespace TD.GUI.Screens.GamePlay.HUD
     {
         [Inject] private GameManager playerInfo;
 
-        [SerializeField] private Text currencyField;
+        [SerializeField] private TMP_Text currencyField;
 
         private void Awake()
         {

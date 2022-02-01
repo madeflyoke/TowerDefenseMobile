@@ -2,13 +2,14 @@ using UnityEngine;
 using TD.GamePlay.Towers;
 using UnityEngine.UI;
 using Zenject;
+using TMPro;
 
 namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
 {
     public class BuildingButton : BaseButton
     {
         [SerializeField] private BaseTower towerToBuild;
-        [SerializeField] private Text costField;
+        [SerializeField] private TMP_Text costField;
         private BuildMenuController buildMenu;
         private bool canBuild;
 

@@ -16,6 +16,7 @@ namespace TD.GamePlay.HomeBuilding
         }
 
         public event Action homeBaseDestroyedEvent;
+        public event Action <float> homeBaseChangedHealthEvent;
 
         [SerializeField] private float maxHealthPoints;
         [SerializeField] private ParticleSystem damageEffect;
@@ -28,6 +29,7 @@ namespace TD.GamePlay.HomeBuilding
         [SerializeField] private int secondStageDamagePercentHP;
         private float currentHealthPoints;
         private DamageState currentDamageState;
+        public float MaxHealthPoints { get => maxHealthPoints; }
 
         private void Awake()
         {
@@ -44,9 +46,11 @@ namespace TD.GamePlay.HomeBuilding
                 GetDamage(17);
             }
         }
+
         private void GetDamage(float damage)
         {    
             currentHealthPoints -= damage;
+            homeBaseChangedHealthEvent?.Invoke(currentHealthPoints);
             damageEffect.Play();
 
             if (currentHealthPoints<=maxHealthPoints*firstStageDamagePercentHP/100
