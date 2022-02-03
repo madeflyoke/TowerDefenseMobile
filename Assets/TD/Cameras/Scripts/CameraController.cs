@@ -2,13 +2,17 @@ using UnityEngine;
 using Cinemachine;
 using Zenject;
 using TD.GUI;
+using Cysharp.Threading.Tasks;
+using TD.GamePlay.Managers;
 
 namespace TD.Cameras
 {
     public class CameraController : MonoBehaviour
     {
         [Inject] private GUIController guiController;
+        [Inject] private GameManager gameManager; 
 
+        [SerializeField] private Transform homeBaseDestroyPivot;
         [SerializeField] private float panSpeed;
         [SerializeField] private float maxZoomHeight;
         [SerializeField] private float minZoomHeight;
@@ -25,6 +29,8 @@ namespace TD.Cameras
         private CinemachineCameraOffset camOffset;
         private CinemachineRecomposer camRecomposer;
         private Vector3 standardViewColliderSize;
+        private bool isLock;
+
         private void Awake()
         {
             cam = GetComponent<CinemachineVirtualCamera>();
@@ -38,26 +44,35 @@ namespace TD.Cameras
         private void OnEnable()
         {
             inputs.Enable();
+            gameManager.endGameEvent += HomeBaseDestroyCamera;
+        }
+        private void OnDisable()
+        {
+            inputs.Disable();
+            gameManager.endGameEvent -= HomeBaseDestroyCamera;
         }
 
         private void Update()
         {
-            Vector2 direction = inputs.General.Camera.ReadValue<Vector2>();
-            if (direction.x != 0 || direction.y != 0)
+            if (Input.GetKeyDown(KeyCode.J))
             {
-                MoveCamera(direction);
+                HomeBaseDestroyCamera();
             }
 
-            float zoom = inputs.General.CameraZoom.ReadValue<float>();
-            if (zoom != 0)
+            if (isLock==false)
             {
-                ZoomCamera(zoom);
-            }
-        }
+                Vector2 direction = inputs.General.Camera.ReadValue<Vector2>();
+                if (direction.x != 0 || direction.y != 0)
+                {
+                    MoveCamera(direction);
+                }
 
-        private void OnDisable()
-        {
-            inputs.Disable();
+                float zoom = inputs.General.CameraZoom.ReadValue<float>();
+                if (zoom != 0)
+                {
+                    ZoomCamera(zoom);
+                }
+            }
         }
 
         private void MoveCamera(Vector2 direction)
@@ -119,6 +134,27 @@ namespace TD.Cameras
             }
 
         }
-    }
+        private async void HomeBaseDestroyCamera()
+        {
+            isLock = true;
+            guiController.gamePlayScreen.buildMenuController.HideMenu();
+            while (Vector3.Distance(homeBaseDestroyPivot.position, transform.position) >= 0.3f || camOffset.m_Offset.z != minZoomHeight
+                || camRecomposer.m_Tilt != maxZoomTilt)
+            {
+
+                float zoomOffsetZ = Mathf.Clamp(camOffset.m_Offset.z +
+                    (-zoomSensitivity * Time.deltaTime), minZoomHeight, maxZoomHeight);
+
+                camOffset.m_Offset = new Vector3(camOffset.m_Offset.x, camOffset.m_Offset.y, zoomOffsetZ);
+
+                transform.position += Vector3.ClampMagnitude(homeBaseDestroyPivot.position - transform.position,
+                    (homeBaseDestroyPivot.position - transform.position).magnitude) * (zoomSensitivity / 10 * Time.deltaTime);
+                float zoomRecomposer = Mathf.Clamp(camRecomposer.m_Tilt +
+                    (zoomSensitivity * Time.deltaTime), minZoomTilt, maxZoomTilt);
+                camRecomposer.m_Tilt = zoomRecomposer;
+                await UniTask.Yield();
+            }
+        }
+   }
 }
 

@@ -15,7 +15,7 @@ namespace TD.GamePlay.Managers
         public int StartCurrencyAmount { get=>startCurrencyAmount;}
         public int CurrencyAmount { get; private set; }
         public float SellMultiplier { get => sellMultiplier;}
-        private HomeBase homeBase;
+        public HomeBase homeBase { get; private set; }
 
         private void Awake()
         {

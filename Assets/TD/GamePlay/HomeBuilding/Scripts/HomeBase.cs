@@ -8,11 +8,13 @@ namespace TD.GamePlay.HomeBuilding
     [RequireComponent(typeof(BoxCollider))]
     public class HomeBase : MonoBehaviour
     {
-        private enum DamageState
+        public enum DamageState
         {
             None,
+            Damaged,
             First,
-            Second
+            Second,
+            Destroyed
         }
 
         public event Action homeBaseDestroyedEvent;
@@ -21,6 +23,7 @@ namespace TD.GamePlay.HomeBuilding
         [SerializeField] private float maxHealthPoints;
         [SerializeField] private ParticleSystem damageEffect;
         [SerializeField] private ParticleSystem deathEffect;
+        [SerializeField] private float deathEffectDelay;
         [SerializeField] private ParticleSystem firstStageDamageEffect;
         [SerializeField] private ParticleSystem secondStageDamageEffect;
         [Range(1, 100f)]
@@ -28,11 +31,12 @@ namespace TD.GamePlay.HomeBuilding
         [Range(1, 100f)]
         [SerializeField] private int secondStageDamagePercentHP;
         private float currentHealthPoints;
-        private DamageState currentDamageState;
+        public DamageState currentDamageState { get;private set; }
         public float MaxHealthPoints { get => maxHealthPoints; }
 
         private void Awake()
         {
+            DeathEffectDelayInitialize();
             currentDamageState = DamageState.None;
             firstStageDamageEffect.gameObject.SetActive(false);
             secondStageDamageEffect.gameObject.SetActive(false);
@@ -52,29 +56,47 @@ namespace TD.GamePlay.HomeBuilding
             currentHealthPoints -= damage;
             homeBaseChangedHealthEvent?.Invoke(currentHealthPoints);
             damageEffect.Play();
+            SetDamageState();
+            if (currentHealthPoints<=0)
+            {
+                deathEffect.Play();
+                homeBaseDestroyedEvent?.Invoke();
+                currentDamageState = DamageState.Destroyed;
+                return;
+            }
 
-            if (currentHealthPoints<=maxHealthPoints*firstStageDamagePercentHP/100
-                &&currentDamageState==DamageState.None)
+        }
+
+        private void SetDamageState()
+        {
+            if (currentHealthPoints!=maxHealthPoints&&currentDamageState==DamageState.None)
+            {
+                currentDamageState = DamageState.Damaged;
+            }
+            else if (currentHealthPoints <= maxHealthPoints * firstStageDamagePercentHP / 100
+                && currentDamageState == DamageState.Damaged)
             {
                 firstStageDamageEffect.gameObject.SetActive(true);
                 firstStageDamageEffect.Play();
                 currentDamageState = DamageState.First;
             }
-            else if (currentHealthPoints<=maxHealthPoints*secondStageDamagePercentHP/100
-                &&currentDamageState==DamageState.First)
+            else if (currentHealthPoints <= maxHealthPoints * secondStageDamagePercentHP / 100
+                && currentDamageState == DamageState.First)
             {
                 secondStageDamageEffect.gameObject.SetActive(true);
                 secondStageDamageEffect.Play();
-                currentDamageState=DamageState.Second;
+                currentDamageState = DamageState.Second;
             }
+        }
 
-            if (currentHealthPoints<=0)
+        private void DeathEffectDelayInitialize()
+        {
+            var childParticles = deathEffect.gameObject.GetComponentsInChildren<ParticleSystem>();
+            foreach (ParticleSystem item in childParticles)
             {
-                deathEffect.Play();
-                homeBaseDestroyedEvent?.Invoke();
-                return;
+                var settings = item.main;
+                settings.startDelay = deathEffectDelay * settings.simulationSpeed;
             }
-
         }
 
         private void OnTriggerEnter(Collider other)

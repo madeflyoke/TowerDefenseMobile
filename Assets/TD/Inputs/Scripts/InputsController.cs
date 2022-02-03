@@ -1,11 +1,15 @@
 using UnityEngine;
 using System;
 using UnityEngine.EventSystems;
+using TD.GamePlay.Managers;
+using Zenject;
 
 namespace TD.Inputs
 {
     public class InputsController : MonoBehaviour
     {
+        [Inject] private GameManager gameManager;
+
         public event Action<GameObject> selectObjectEvent;
 
         private PlayerInputs inputs;
@@ -21,10 +25,12 @@ namespace TD.Inputs
         {
             inputs.Enable();
             inputs.General.Select.performed += ctx => CheckSelectedPosition();
+            gameManager.endGameEvent += inputs.Disable;
         }
         private void OnDisable()
         {
             inputs.Disable();
+            gameManager.endGameEvent -= inputs.Disable;
         }
 
         private void CheckSelectedPosition()

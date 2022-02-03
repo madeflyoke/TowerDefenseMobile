@@ -1,7 +1,9 @@
 using TD.GamePlay.Managers;
 using TD.GUI.Screens.GamePlay.BuildMenu.Buttons;
+using DG.Tweening;
+using UnityEngine;
 
-namespace TD.GUI.Screens.GamePlay.HUD
+namespace TD.GUI.Screens.GamePlay.HUD.Buttons
 {
     public class StartWavesButton : BaseButton
     {
@@ -14,7 +16,8 @@ namespace TD.GUI.Screens.GamePlay.HUD
         protected override void Listeners()
         {
             wavesSpawner.StartWaves();
-            gameObject.SetActive(false);
+            transform.DOPunchScale(Vector3.one * 0.2f, 0.1f)
+                .OnComplete(() => gameObject.SetActive(false));        
         }
     }
 }

@@ -21,7 +21,7 @@ namespace TD.GamePlay.Managers
             public int delay;
             public PathCreator path;
             public List<Wave> waves;
-            public int currentWaveIndex { get; set; }
+            public int currentWaveIndex { get; set; }          
         }
 
         [SerializeField] private List<PathWaves> pathWaves;

@@ -4,9 +4,16 @@ using UnityEngine;
 
 namespace TD.GUI.Screens
 {
-    public class BaseScreen : MonoBehaviour
+    public abstract class BaseScreen : MonoBehaviour
     {
+        public virtual void Show()
+        {
 
+        }
+        public virtual void Hide()
+        {
+
+        }
     }
 }
 

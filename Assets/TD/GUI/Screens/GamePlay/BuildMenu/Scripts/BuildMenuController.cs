@@ -46,7 +46,7 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu
         {
             CurrentTowerSpot = towerSpot;
             transform.localScale = transform.localScale*((maxBuildMenuSize-1f)*(virtualCamOffset.m_Offset.z)/40f)+standardScale;
-
+            transform.DOScale(transform.localScale, 0.1f).From(Vector3.zero);
             if (TowerSpotsContainer.SpotTowers.ContainsKey(towerSpot))
             {
                 TowerSpotsContainer.SpotTowers.TryGetValue(towerSpot, out BaseTower targetTower);
