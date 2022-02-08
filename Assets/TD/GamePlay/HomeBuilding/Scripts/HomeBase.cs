@@ -107,7 +107,7 @@ namespace TD.GamePlay.HomeBuilding
             {
                 BaseUnit enemy = other.gameObject.GetComponent<BaseUnit>();
                 GetDamage(enemy.Damage);
-                enemy.gameObject.SetActive(false);
+                enemy.GetDamage(enemy.MaxHealthPoints);
             }
         }
     }

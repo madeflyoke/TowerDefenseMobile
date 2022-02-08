@@ -52,8 +52,10 @@ namespace TD.GamePlay.Towers
                     }
                 }).OnKill(() =>
                 {
-                    currentProjectile.SetActive(false);
-
+                    if (currentProjectile!=null)
+                    {
+                        currentProjectile.SetActive(false);
+                    }
                 });
         }
 

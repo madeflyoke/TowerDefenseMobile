@@ -45,8 +45,9 @@ namespace TD.GUI.Screens.EndGame
         }
 
         public override void Hide()
-        {                
-            gameObject.SetActive(false);        
+        {
+            ResetScreen();
+            gameObject.SetActive(false);          
         }
     }
 }

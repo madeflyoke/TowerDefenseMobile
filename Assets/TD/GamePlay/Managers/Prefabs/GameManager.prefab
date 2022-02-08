@@ -43,6 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 968729a1b8634fb4da9b7a019c11583e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetFPS: 40
+  targetFPS: 60
   startCurrencyAmount: 100
   sellMultiplier: 0.5

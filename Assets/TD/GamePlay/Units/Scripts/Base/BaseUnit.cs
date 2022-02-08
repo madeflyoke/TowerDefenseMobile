@@ -78,7 +78,8 @@ namespace TD.GamePlay.Units
             pooler.GetObjectFromPool(deathEffect, transform.position);
             enemyDieEvent?.Invoke(this);
             gameObject.SetActive(false);
-        }
+        }       
+
 
         protected virtual void ResetValues()
         {

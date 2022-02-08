@@ -90,7 +90,7 @@ namespace TD.Cameras
             }
 
             Vector3 newPos = cam.transform.position + new Vector3(direction.x, 0f, direction.y) * panSpeed * Time.deltaTime;
-            cam.transform.position = Vector3.Lerp(cam.transform.position, newPos, Time.deltaTime * panSpeed);
+            cam.transform.position = Vector3.Slerp(cam.transform.position, newPos, Time.deltaTime * panSpeed);
         }
 
         private void ZoomCamera(float zoomValue)
@@ -107,29 +107,30 @@ namespace TD.Cameras
 
             if (zoomValue < 0)
             {
-                transform.position = Vector3.Lerp(transform.position, centerPosition, zoomSensitivity / 10 * Time.deltaTime);
+                transform.position = Vector3.Lerp(transform.position, centerPosition, zoomSensitivity /10 * Time.deltaTime);
 
-                cameraViewCollider.size += cameraViewCollider.size * (-zoomValue / 100);
-                if (cameraViewCollider.size.x > standardViewColliderSize.x)
-                {
-                    cameraViewCollider.size = standardViewColliderSize;
-                }
                 float zoomRecomposer = Mathf.Clamp(camRecomposer.m_Tilt +
                     (-zoomValue * zoomSensitivity * Time.deltaTime), minZoomTilt, maxZoomTilt);
                 camRecomposer.m_Tilt = zoomRecomposer;
+
+                cameraViewCollider.size += cameraViewCollider.size * (-zoomValue / zoomSensitivity);
+                if (cameraViewCollider.size.x > standardViewColliderSize.x||camOffset.m_Offset.z == minZoomHeight)
+                {
+                    cameraViewCollider.size = standardViewColliderSize;
+                }
             }
             else if (zoomValue > 0)
             {
-                cameraViewCollider.size -= cameraViewCollider.size * (zoomValue / 100);
-                if (cameraViewCollider.size.x < (standardViewColliderSize.x / 3))
-                {
-                    cameraViewCollider.size = standardViewColliderSize / 3;
-                }
                 if (camOffset.m_Offset.z > maxZoomHeight * startTilting)
                 {
                     float zoomRecomposer = Mathf.Clamp(camRecomposer.m_Tilt +
                     (-zoomValue * zoomSensitivity * Time.deltaTime), minZoomTilt, maxZoomTilt);
                     camRecomposer.m_Tilt = zoomRecomposer;
+                }
+                cameraViewCollider.size -= cameraViewCollider.size * (zoomValue / zoomSensitivity);
+                if (cameraViewCollider.size.x < (standardViewColliderSize.x / 3)||camOffset.m_Offset.z==maxZoomHeight)
+                {
+                    cameraViewCollider.size = standardViewColliderSize / 3;
                 }
             }
         }

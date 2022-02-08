@@ -63,7 +63,6 @@ namespace TD.GUI
 
         private void RestartLevelUI()
         {
-            EndGameScreen.ResetScreen();
             GamePlayScreen.ResetScreen();
             GamePlayScreen.Initialize();
             ShowScreen(GamePlayScreen);

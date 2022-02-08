@@ -32,6 +32,7 @@ namespace TD.GUI.Screens.EndGame
                         .OnStart(() => secondStar.SetActive(true));
                     return true;
                 case HomeBase.DamageState.First:
+                case HomeBase.DamageState.Second:
                     firstStar.transform.DOPunchScale(Vector3.one * 0.1f, 0.3f).SetDelay(1f)
                         .OnStart(() => firstStar.SetActive(true));
                     return true;
