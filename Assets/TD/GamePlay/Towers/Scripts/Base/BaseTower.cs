@@ -7,7 +7,6 @@ namespace TD.GamePlay.Towers
 {
     public abstract class BaseTower : MonoBehaviour
     {
-        [Inject] private Pooler pooler;
         [Inject] private GameManager gameManager;
 
         [SerializeField] private BaseTower nextTowerLevel;
@@ -26,7 +25,7 @@ namespace TD.GamePlay.Towers
         public TowerTargetter Targeter { get; private set; }
         public BaseTower NextTowerLevel { get => nextTowerLevel; }
 
-        private void Awake()
+        public void Initialize(Pooler pooler)
         {
             Attacker = GetComponentInChildren<TowerAttacker>();
             Targeter = GetComponentInChildren<TowerTargetter>();

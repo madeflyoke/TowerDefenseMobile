@@ -2,6 +2,7 @@ using UnityEngine;
 using PathCreation.Examples;
 using Zenject;
 using TD.GamePlay.Managers;
+using System;
 
 namespace TD.GamePlay.Units
 {
@@ -9,6 +10,8 @@ namespace TD.GamePlay.Units
     {
         [Inject] private GameManager gameManager;
         [Inject] private Pooler pooler;
+
+        public event Action<BaseUnit> enemyDieEvent;
 
         [SerializeField] protected float speedMultiplier;
         [SerializeField] protected float maxHealthPoints;
@@ -73,6 +76,7 @@ namespace TD.GamePlay.Units
         {
             gameManager.AddCurrency(killReward);
             pooler.GetObjectFromPool(deathEffect, transform.position);
+            enemyDieEvent?.Invoke(this);
             gameObject.SetActive(false);
         }
 

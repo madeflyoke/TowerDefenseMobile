@@ -17,6 +17,9 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu
         [SerializeField] private Color enableCostColor;
         [SerializeField] private Color disableCostColor;
         [SerializeField] private float maxBuildMenuSize;
+        [SerializeField] private BuildingButton buildingButton;
+        [SerializeField] private UpgradeButton upgradeButton;
+        [SerializeField] private SellButton sellButton;
         public Color EnableCostColor { get => enableCostColor; }
         public Color DisableCostColor { get => disableCostColor; }
         public GameObject CurrentTowerSpot { get; private set; }
@@ -25,10 +28,15 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu
 
         private Vector3 standardScale;
         private Camera cam;
-        private BuildingButton buildingButton;
-        private UpgradeButton upgradeButton;
-        private SellButton sellButton;
         private CinemachineCameraOffset virtualCamOffset;
+        public Pooler pooler { get;private set; }
+
+        private void Awake()
+        {
+            buildingButton = GetComponentInChildren<BuildingButton>();
+            upgradeButton = GetComponentInChildren<UpgradeButton>();
+            sellButton = GetComponentInChildren<SellButton>();
+        }
         public void Initialize()
         {
             standardScale = transform.localScale;
@@ -36,12 +44,9 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu
             virtualCamOffset = FindObjectOfType<CinemachineVirtualCamera>().gameObject
                 .GetComponent<CinemachineCameraOffset>();
             TowerSpotsContainer = new TowerSpotsContainer();
-            buildingButton = GetComponentInChildren<BuildingButton>();
-            upgradeButton = GetComponentInChildren<UpgradeButton>();
-            sellButton = GetComponentInChildren<SellButton>();
-            HideMenu();
+            pooler = FindObjectOfType<Pooler>();
         }
-
+     
         public void SetMenu(GameObject towerSpot)
         {
             CurrentTowerSpot = towerSpot;

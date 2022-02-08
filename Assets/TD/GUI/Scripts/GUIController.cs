@@ -2,58 +2,71 @@ using TD.GUI.Screens;
 using TD.GUI.Screens.EndGame;
 using TD.GUI.Screens.GamePlay;
 using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
 using Zenject;
 using TD.GamePlay.Managers;
+using TD.GUI.Screens.MainMenu;
 
 namespace TD.GUI
 {
     public class GUIController : MonoBehaviour
     {
         [Inject] private GameManager gameManager;
-        public GamePlayScreen gamePlayScreen { get;private set; }
-        public EndGameScreen endGameScreen { get; private set; }
+        [SerializeField] private MainMenuScreen mainMenuScreen;
+        [SerializeField] private GamePlayScreen gamePlayScreen;
+        [SerializeField] private EndGameScreen endGameScreen;
+        
+        public MainMenuScreen MainMenuScreen { get => mainMenuScreen; }
+        public GamePlayScreen GamePlayScreen { get=>gamePlayScreen;}
+        public EndGameScreen EndGameScreen { get=>endGameScreen;}
         private List<BaseScreen> screens;
 
         private void Awake()
         {
             screens = new List<BaseScreen>();
-            gamePlayScreen = GetComponentInChildren<GamePlayScreen>();
-            screens.Add(gamePlayScreen);
-            endGameScreen = GetComponentInChildren<EndGameScreen>();
-            screens.Add(endGameScreen);              
-        }
-
-        private void Start()
-        {
-            StartGameUI();
+            screens.Add(MainMenuScreen);
+            screens.Add(GamePlayScreen);
+            screens.Add(EndGameScreen);
         }
 
         private void OnEnable()
         {
+            gameManager.launchGameStateEvent += LaunchGameUI;
+            gameManager.startLevelEvent += StartGameUI;
             gameManager.endGameEvent += EndGameUI;
             gameManager.restartLevelEvent += RestartLevelUI;
         }
         private void OnDisable()
         {
+            gameManager.launchGameStateEvent -= LaunchGameUI;
+            gameManager.startLevelEvent -= StartGameUI;
             gameManager.endGameEvent -= EndGameUI;
             gameManager.restartLevelEvent -= RestartLevelUI;
         }
 
+        private void LaunchGameUI()
+        {
+            ShowScreen(MainMenuScreen);
+        }
+
         private void StartGameUI()
         {
-            ShowScreen(gamePlayScreen);
+            ShowScreen(GamePlayScreen);
+            GamePlayScreen.Initialize();
         }
 
         private void EndGameUI()
         {
-            ShowScreen(endGameScreen);
+            GamePlayScreen.ResetScreen();
+            ShowScreen(EndGameScreen);
         }
 
         private void RestartLevelUI()
         {
-            gamePlayScreen.ResetScreen();
+            EndGameScreen.ResetScreen();
+            GamePlayScreen.ResetScreen();
+            GamePlayScreen.Initialize();
+            ShowScreen(GamePlayScreen);
         }
 
         private void ShowScreen(BaseScreen screen)

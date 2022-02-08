@@ -14,22 +14,28 @@ namespace TD.Inputs
 
         private PlayerInputs inputs;
         private Camera cam;
-
-        private void Awake()
+        private void Initialize()
         {
-            inputs = new PlayerInputs();
-            cam = Camera.main;   
+            cam = Camera.main;
+            inputs.Enable();
+            inputs.General.Select.performed += ctx => CheckSelectedPosition();
         }
 
         private void OnEnable()
         {
-            inputs.Enable();
-            inputs.General.Select.performed += ctx => CheckSelectedPosition();
+            inputs = new PlayerInputs();
+            gameManager.launchGameStateEvent += inputs.Disable;
+            gameManager.startLevelEvent += Initialize;
+            gameManager.restartLevelEvent += Initialize;
             gameManager.endGameEvent += inputs.Disable;
         }
+
         private void OnDisable()
         {
             inputs.Disable();
+            gameManager.launchGameStateEvent -= inputs.Disable;
+            gameManager.startLevelEvent -= Initialize;
+            gameManager.restartLevelEvent -= Initialize;
             gameManager.endGameEvent -= inputs.Disable;
         }
 

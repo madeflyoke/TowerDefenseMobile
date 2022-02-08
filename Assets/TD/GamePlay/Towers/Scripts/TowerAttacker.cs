@@ -26,29 +26,40 @@ namespace TD.GamePlay.Towers
         public void Initialize(Pooler pooler)
         {
             this.pooler = pooler;
-            muzzleFlash = Instantiate( 
-                muzzleFlashEffect, attackPoint.position, muzzleFlashEffect.transform.rotation, attackPoint);      
+            muzzleFlash = Instantiate(
+                muzzleFlashEffect, attackPoint.position, muzzleFlashEffect.transform.rotation, attackPoint);
         }
 
         private void Shoot(float attackPower, float damage)
         {
             muzzleFlash.Play();
-            GameObject proj = pooler.GetObjectFromPool(projectilePrefab, attackPoint.position);
-            shootingTween = proj.transform.DOMove(CorrectShot(attackPower), 1 / attackPower).SetEase(Ease.Linear)
+            GameObject currentProjectile = pooler.GetObjectFromPool(projectilePrefab, attackPoint.position);
+            shootingTween = currentProjectile.transform.DOMove(CorrectShot(attackPower), 1 / attackPower).SetEase(Ease.Linear)
                 .OnComplete(() =>
                 {
-                    Collider[] colliders = Physics.OverlapSphere(proj.transform.position, splashHitRadius, 1 << 6);
-                    foreach (Collider collider in colliders)
+                    if (currentProjectile != null && pooler != null)
                     {
-                        if (collider.gameObject.activeInHierarchy)
+                        Collider[] colliders = Physics.OverlapSphere(currentProjectile.transform.position, splashHitRadius, 1 << 6);
+                        foreach (Collider collider in colliders)
                         {
-                            collider.gameObject.GetComponent<BaseUnit>().GetDamage(damage);
+                            if (collider.gameObject.activeInHierarchy)
+                            {
+                                collider.gameObject.GetComponent<BaseUnit>().GetDamage(damage);
+                            }
                         }
+                        pooler.GetObjectFromPool(projectileExplosionEffect, currentProjectile.transform.position);
+                        currentProjectile.SetActive(false);
                     }
-                    pooler.GetObjectFromPool(projectileExplosionEffect, proj.transform.position);
-                    proj.SetActive(false);
+                }).OnKill(() =>
+                {
+                    currentProjectile.SetActive(false);
 
-                }).OnKill(()=>proj.SetActive(false));
+                });
+        }
+
+        private void OnDisable()
+        {
+            shootingTween.Kill();
         }
 
         private Vector3 CorrectShot(float attackPower)

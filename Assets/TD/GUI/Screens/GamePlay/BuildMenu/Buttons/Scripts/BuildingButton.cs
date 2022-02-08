@@ -1,8 +1,9 @@
 using UnityEngine;
 using TD.GamePlay.Towers;
-using UnityEngine.UI;
-using Zenject;
 using TMPro;
+using TD.GUI.Buttons;
+using Zenject;
+using TD.GamePlay.Managers;
 
 namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
 {
@@ -12,6 +13,7 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
         [SerializeField] private TMP_Text costField;
         private BuildMenuController buildMenu;
         private bool canBuild;
+        
 
         protected override void Awake()
         {
@@ -43,6 +45,7 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
 
         protected override void Listeners()
         {
+            base.Listeners();
             BuildTower();
         }
 
@@ -64,6 +67,7 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
             BaseTower tower = buildMenu.Container.InstantiatePrefabForComponent<BaseTower>(
                 towerToBuild, buildMenu.CurrentTowerSpot.transform.position,
                 Quaternion.identity, buildMenu.CurrentTowerSpot.transform);
+            tower.Initialize(buildMenu.pooler);
             buildMenu.TowerSpotsContainer.AddTowerToSpot(buildMenu.CurrentTowerSpot, tower);
             buildMenu.PlayerInfo.RemoveCurrency(tower.Cost);
 

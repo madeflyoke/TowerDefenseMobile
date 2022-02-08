@@ -7,6 +7,6 @@ public class GUIControllerInstaller : MonoInstaller
     [SerializeField] private GUIController guiController;
     public override void InstallBindings()
     {
-        Container.Bind<GUIController>().FromInstance(guiController).AsSingle().NonLazy();
+        Container.Bind<GUIController>().FromComponentInNewPrefab(guiController).AsSingle().NonLazy();
     }
 }

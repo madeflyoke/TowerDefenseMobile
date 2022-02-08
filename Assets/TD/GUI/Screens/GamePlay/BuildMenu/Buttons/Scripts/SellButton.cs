@@ -1,3 +1,4 @@
+using TD.GUI.Buttons;
 using UnityEngine;
 
 namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
@@ -14,6 +15,7 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
 
         protected override void Listeners()
         {
+            base.Listeners();
             Sell();
         }
 
@@ -22,7 +24,6 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
             buildMenu.PlayerInfo.AddCurrency((int)(buildMenu.CurrentTower.Cost * buildMenu.PlayerInfo.SellMultiplier));
             buildMenu.TowerSpotsContainer.RemoveTowerFromSpot(buildMenu.CurrentTowerSpot);
             buildMenu.CurrentTower.DestroyTower();
-            Debug.Log("SOLD");
             buildMenu.HideMenu();
         }
     }

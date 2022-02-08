@@ -2,25 +2,49 @@ using UnityEngine;
 using System;
 using TD.GamePlay.HomeBuilding;
 using UnityEngine.SceneManagement;
+using Cysharp.Threading.Tasks;
+using TD.GUI.Buttons;
+using TD.GUI.Screens.EndGame.Buttons;
+using TD.GUI.Screens.GamePlay.HUD;
+using TD.GUI.Screens.MainMenu.Buttons;
+
 namespace TD.GamePlay.Managers
 {
     public class GameManager : MonoBehaviour
     {
-        public event Action<int> currencyChangedEvent;
+        public event Action launchGameStateEvent;
+        public event Action startLevelEvent;
         public event Action endGameEvent;
         public event Action restartLevelEvent;
+        public event Action<int> currencyChangedEvent;
 
+        [SerializeField] private int targetFPS;
         [SerializeField] private int startCurrencyAmount;
         [SerializeField] private float sellMultiplier;
-        public int StartCurrencyAmount { get=>startCurrencyAmount;}
+
+        public int StartCurrencyAmount { get => startCurrencyAmount; }
         public int CurrencyAmount { get; private set; }
-        public float SellMultiplier { get => sellMultiplier;}
+        public float SellMultiplier { get => sellMultiplier; }
         public HomeBase homeBase { get; private set; }
+        private WavesSpawner wavesSpawner;
 
         private void Awake()
         {
-            CurrencyAmount = startCurrencyAmount;
+            Application.targetFrameRate = targetFPS;
+        }
+        private void Start()
+        {
+            LaunchGameState();
+        }
+        private void GamePlayInitialize()
+        {
             homeBase = FindObjectOfType<HomeBase>();
+            wavesSpawner = FindObjectOfType<WavesSpawner>();
+            homeBase.homeBaseDestroyedEvent -= EndGameLogic;
+            wavesSpawner.wavesEndEvent -= EndGameLogic;
+            CurrencyAmount = startCurrencyAmount;
+            homeBase.homeBaseDestroyedEvent += EndGameLogic;
+            wavesSpawner.wavesEndEvent += EndGameLogic;
         }
 
         private void Update()
@@ -28,31 +52,57 @@ namespace TD.GamePlay.Managers
             if (Input.GetKeyDown(KeyCode.S))
             {
                 EndGameLogic();
-            }            
+            }
         }
 
-        private void OnEnable()
+        public void CheckButtonCall(BaseButton button)
         {
-            homeBase.homeBaseDestroyedEvent += EndGameLogic;
-        }
-        private void OnDisable()
-        {
-            homeBase.homeBaseDestroyedEvent -= EndGameLogic;
+            if (button is QuitButton)
+            {
+                LaunchGameState();
+            }
+            else if (button is RetryButton)
+            {
+                ResetLevel();
+            }
+            else if (button is StartGameButton)
+            {
+                StartLevel(1);
+            }
         }
 
-        public void ResetLevel()
+        private async void LaunchGameState()
         {
-            if (SceneManager.GetActiveScene().buildIndex!=10) //set 0 index to main menu!!!
-            {            
-                SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+            if (SceneManager.GetActiveScene().buildIndex!=0)
+            {
+                await SceneManager.LoadSceneAsync(0);
+            }
+            launchGameStateEvent?.Invoke();
+        }
+
+        private async void ResetLevel()
+        {
+            if (SceneManager.GetActiveScene().buildIndex != 0)
+            {
+                await SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
                 restartLevelEvent?.Invoke();
-            }        
+                GamePlayInitialize();
+            }
+        }
+
+        private async void StartLevel(int index)
+        {
+            if (index != 0)
+            {
+                await SceneManager.LoadSceneAsync(index);
+                startLevelEvent?.Invoke();
+                GamePlayInitialize();
+            }
         }
 
         private void EndGameLogic()
         {
             endGameEvent?.Invoke();
-            Debug.LogWarning("END GAME");          
         }
 
         public void AddCurrency(int amount)

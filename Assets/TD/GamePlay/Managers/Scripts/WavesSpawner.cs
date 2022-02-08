@@ -21,34 +21,41 @@ namespace TD.GamePlay.Managers
             public int delay;
             public PathCreator path;
             public List<Wave> waves;
-            public int currentWaveIndex { get; set; }          
+            public int currentWaveIndex { get; set; }
         }
 
+        public event Action wavesEndEvent;
         [SerializeField] private List<PathWaves> pathWaves;
         private CancellationTokenSource cancellationToken;
+        public List<PathWaves> PathWavesList { get => pathWaves; }
+        private int enemiesNumber;
 
-        private void Awake()
-        {
-            cancellationToken = new CancellationTokenSource();          
-        }
 
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Y))
             {
-                cancellationToken.Cancel();            
+                cancellationToken.Cancel();
             }
         }
 
         private void OnEnable()
         {
+            gameManager.startLevelEvent += Initialize;
             gameManager.endGameEvent += StopWaves;
-            gameManager.restartLevelEvent += StopWaves;
+            gameManager.restartLevelEvent += Initialize;
         }
         private void OnDisable()
         {
+            gameManager.startLevelEvent -= Initialize;
             gameManager.endGameEvent -= StopWaves;
-            gameManager.restartLevelEvent -= StopWaves;
+            gameManager.restartLevelEvent -= Initialize;
+            if (cancellationToken!=null)
+            {
+                cancellationToken.Cancel();
+                cancellationToken = null;
+            }
+
         }
 
         public void StartWaves()
@@ -63,6 +70,22 @@ namespace TD.GamePlay.Managers
             cancellationToken.Cancel();
         }
 
+        private void Initialize()
+        {
+            cancellationToken = new CancellationTokenSource();
+            CountEnemies();
+        }
+
+        private void CheckEnemiesDeath(BaseUnit unit)
+        {
+            enemiesNumber--;
+            unit.enemyDieEvent -= CheckEnemiesDeath;
+            if (enemiesNumber<=0)
+            {
+                wavesEndEvent?.Invoke();
+            }
+        }
+
         private async void PushEnemy(PathWaves pathWaves)
         {
             if (pathWaves.currentWaveIndex==0)
@@ -75,6 +98,7 @@ namespace TD.GamePlay.Managers
                 await UniTask.Delay((int)enemyConfig.spawnDelay * 1000,cancellationToken: cancellationToken.Token);
                 GameObject enemy = pooler.GetObjectFromPool(enemyConfig.prefab, pathWaves.path.bezierPath.GetPoint(0));
                 BaseUnit unit = enemy.GetComponent<BaseUnit>();
+                unit.enemyDieEvent += CheckEnemiesDeath;
                 unit.pathFollower.pathCreator = pathWaves.path;
                 unit.Move(); 
             }
@@ -87,11 +111,24 @@ namespace TD.GamePlay.Managers
           
             if (pathWaves.currentWaveIndex > pathWaves.waves.Count - 1)
             {
-                Debug.Log("END WAVES");
                 return;
             }
             await UniTask.Delay((int)pathWaves.waves[pathWaves.currentWaveIndex].WaveDelay * 1000,cancellationToken:cancellationToken.Token);
             PushEnemy(pathWaves);
+        }
+
+        private void CountEnemies()
+        {
+            foreach (var pathWave in pathWaves)
+            {
+                foreach (var enemies in pathWave.waves)
+                {
+                    if (enemies != null)
+                    {
+                        enemiesNumber += enemies.Enemies.Count;
+                    }
+                }
+            }
         }
     }
 }

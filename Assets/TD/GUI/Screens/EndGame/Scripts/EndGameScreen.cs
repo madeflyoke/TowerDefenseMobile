@@ -13,12 +13,7 @@ namespace TD.GUI.Screens.EndGame
         [SerializeField] private float delayBeforeAppear;
         [SerializeField] private GameObject failTitle;
         [SerializeField] private GameObject successTitle;
-        private StarsAccrual starsAccrual;
-
-        private void Awake()
-        {
-            starsAccrual = GetComponentInChildren<StarsAccrual>();           
-        }
+        [SerializeField] private StarsAccrual starsAccrual;
 
         public async override void Show()
         {
@@ -42,12 +37,16 @@ namespace TD.GUI.Screens.EndGame
             }
         }
 
-        public override void Hide()
+        public void ResetScreen()
         {
-            starsAccrual.ResetStars();           
-            gameObject.SetActive(false);
+            starsAccrual.ResetStars();
             successTitle.SetActive(false);
             failTitle.SetActive(false);
+        }
+
+        public override void Hide()
+        {                
+            gameObject.SetActive(false);        
         }
     }
 }

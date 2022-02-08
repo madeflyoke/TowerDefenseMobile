@@ -1,4 +1,4 @@
-using TD.GUI.Screens.GamePlay.BuildMenu.Buttons;
+using TD.GUI.Buttons;
 
 namespace TD.GUI.Screens.GamePlay.Menu.Buttons
 {
@@ -6,6 +6,7 @@ namespace TD.GUI.Screens.GamePlay.Menu.Buttons
     {
         protected override void Listeners()
         {
+            base.Listeners();
             transform.parent.GetComponent<GamePlayMenu>().Hide();
         }
     }

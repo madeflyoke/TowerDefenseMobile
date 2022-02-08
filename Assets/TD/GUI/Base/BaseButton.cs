@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
+namespace TD.GUI.Buttons
 {
     public abstract class BaseButton : MonoBehaviour
     {
@@ -22,7 +22,9 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
             button.onClick.RemoveListener(Listeners);
         }
 
-        protected virtual void Listeners() { }
+        protected virtual void Listeners() 
+        {
+        }
     }
 }
 

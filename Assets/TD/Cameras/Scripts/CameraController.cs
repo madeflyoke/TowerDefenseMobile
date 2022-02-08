@@ -10,7 +10,7 @@ namespace TD.Cameras
     public class CameraController : MonoBehaviour
     {
         [Inject] private GUIController guiController;
-        [Inject] private GameManager gameManager; 
+        [Inject] private GameManager gameManager;
 
         [SerializeField] private Transform homeBaseDestroyPivot;
         [SerializeField] private float panSpeed;
@@ -59,7 +59,7 @@ namespace TD.Cameras
                 HomeBaseDestroyCamera();
             }
 
-            if (isLock==false)
+            if (isLock == false)
             {
                 Vector2 direction = inputs.General.Camera.ReadValue<Vector2>();
                 if (direction.x != 0 || direction.y != 0)
@@ -77,9 +77,9 @@ namespace TD.Cameras
 
         private void MoveCamera(Vector2 direction)
         {
-            guiController.gamePlayScreen.buildMenuController.HideMenu();
+            guiController.GamePlayScreen.BuildMenuController.HideMenu();
             if (direction.x < 0 && cameraViewCollider.bounds.min.x <= cameraBoundsCollider.bounds.min.x ||
-            direction.x > 0 && cameraViewCollider.bounds.max.x >= cameraBoundsCollider.bounds.max.x)
+        direction.x > 0 && cameraViewCollider.bounds.max.x >= cameraBoundsCollider.bounds.max.x)
             {
                 direction.x = 0;
             }
@@ -90,12 +90,12 @@ namespace TD.Cameras
             }
 
             Vector3 newPos = cam.transform.position + new Vector3(direction.x, 0f, direction.y) * panSpeed * Time.deltaTime;
-            cam.transform.position = newPos;
+            cam.transform.position = Vector3.Lerp(cam.transform.position, newPos, Time.deltaTime * panSpeed);
         }
 
         private void ZoomCamera(float zoomValue)
         {
-            guiController.gamePlayScreen.buildMenuController.HideMenu();
+            guiController.GamePlayScreen.BuildMenuController.HideMenu();
             float zoomOffsetZ = Mathf.Clamp(camOffset.m_Offset.z + (zoomValue * zoomSensitivity * Time.deltaTime), minZoomHeight, maxZoomHeight);
 
             camOffset.m_Offset = new Vector3(camOffset.m_Offset.x, camOffset.m_Offset.y, zoomOffsetZ);
@@ -123,7 +123,7 @@ namespace TD.Cameras
                 cameraViewCollider.size -= cameraViewCollider.size * (zoomValue / 100);
                 if (cameraViewCollider.size.x < (standardViewColliderSize.x / 3))
                 {
-                    cameraViewCollider.size = standardViewColliderSize/3;
+                    cameraViewCollider.size = standardViewColliderSize / 3;
                 }
                 if (camOffset.m_Offset.z > maxZoomHeight * startTilting)
                 {
@@ -132,12 +132,12 @@ namespace TD.Cameras
                     camRecomposer.m_Tilt = zoomRecomposer;
                 }
             }
-
         }
+
         private async void HomeBaseDestroyCamera()
         {
             isLock = true;
-            guiController.gamePlayScreen.buildMenuController.HideMenu();
+            guiController.GamePlayScreen.BuildMenuController.HideMenu();
             while (Vector3.Distance(homeBaseDestroyPivot.position, transform.position) >= 0.3f || camOffset.m_Offset.z != minZoomHeight
                 || camRecomposer.m_Tilt != maxZoomTilt)
             {
@@ -155,6 +155,6 @@ namespace TD.Cameras
                 await UniTask.Yield();
             }
         }
-   }
+    }
 }
 

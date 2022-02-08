@@ -1,3 +1,5 @@
+using TD.GUI.Buttons;
+
 namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
 {
     public class MenuPanelButton : BaseButton
@@ -12,6 +14,7 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
 
         protected override void Listeners()
         {
+            base.Listeners();
            buildMenuController.HideMenu();
         }
     }

@@ -19168,6 +19168,7 @@ MonoBehaviour:
   maxHealthPoints: 150
   damageEffect: {fileID: 1557976039012829099}
   deathEffect: {fileID: 286948222265472233}
+  deathEffectDelay: 2
   firstStageDamageEffect: {fileID: 7663297967189973012}
   secondStageDamageEffect: {fileID: 148534373444890299}
   firstStageDamagePercentHP: 50

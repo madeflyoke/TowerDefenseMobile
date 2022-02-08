@@ -1,7 +1,7 @@
 using TD.GamePlay.Towers;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using TD.GUI.Buttons;
 
 namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
 {
@@ -19,6 +19,7 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
 
         protected override void Listeners()
         {
+            base.Listeners();
             Upgrade();
         }
 
@@ -69,6 +70,7 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
             BaseTower tower = buildMenu.Container.InstantiatePrefabForComponent<BaseTower>(
                buildMenu.CurrentTower.NextTowerLevel, buildMenu.CurrentTowerSpot.transform.position,
                Quaternion.identity, buildMenu.CurrentTowerSpot.transform);
+            tower.Initialize(buildMenu.pooler);
             buildMenu.TowerSpotsContainer.AddTowerToSpot(buildMenu.CurrentTowerSpot, tower);
             buildMenu.CurrentTower.DestroyTower();
             buildMenu.HideMenu();

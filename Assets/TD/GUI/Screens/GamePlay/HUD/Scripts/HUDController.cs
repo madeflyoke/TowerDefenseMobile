@@ -11,12 +11,12 @@ namespace TD.GUI.Screens.GamePlay.HUD
         [Inject] private GameManager gameManager;
 
         [SerializeField] private TMP_Text currencyField;
-        private StartWavesButton startWavesButton;
+        [SerializeField] private StartWavesButton startWavesButton;
+        [SerializeField] private HomeBaseHealthBar homeBaseHealthBar;
 
-        private void Awake()
+        public void Initialize()
         {
-            startWavesButton = GetComponentInChildren<StartWavesButton>();
-            ResetHUD();
+            homeBaseHealthBar.Initialize();
         }
 
         private void OnEnable()
@@ -40,8 +40,9 @@ namespace TD.GUI.Screens.GamePlay.HUD
 
         public void ResetHUD()
         {
-            currencyField.text = gameManager.StartCurrencyAmount.ToString();
-            startWavesButton?.gameObject.SetActive(true);
+            startWavesButton.gameObject.SetActive(false);
+            startWavesButton.gameObject.SetActive(true);
+            currencyField.text = gameManager.StartCurrencyAmount.ToString();          
         }
 
         private void ChangeCurrencyUI(int amount)

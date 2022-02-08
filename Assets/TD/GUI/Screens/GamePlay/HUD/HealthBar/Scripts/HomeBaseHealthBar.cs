@@ -8,19 +8,13 @@ namespace TD.GUI.Screens.GamePlay.HUD
     {
         [SerializeField] private Image fill;
         private HomeBase homeBase;
-        private void Awake()
-        {
-            ResetHealthBar();
-            homeBase = FindObjectOfType<HomeBase>();
-        }
 
-        private void OnEnable()
+        public void Initialize()
         {
-            homeBase.homeBaseChangedHealthEvent += ChangeValue;
-        }
-        private void OnDisable()
-        {
+            homeBase = FindObjectOfType<HomeBase>();
             homeBase.homeBaseChangedHealthEvent -= ChangeValue;
+            ResetHealthBar();
+            homeBase.homeBaseChangedHealthEvent += ChangeValue;
         }
 
         private void ChangeValue(float homeBaseHealth)
