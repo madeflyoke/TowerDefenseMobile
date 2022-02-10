@@ -36,6 +36,14 @@
                     "expectedControlType": "Axis",
                     "processors": "Clamp(min=-1,max=1)",
                     "interactions": ""
+                },
+                {
+                    "name": "Test",
+                    "type": "Value",
+                    "id": "5f9a77c4-ca30-4ea6-bed7-9687a404d2ed",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -159,6 +167,120 @@
                     "action": "CameraZoom",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "f8312789-02e6-4650-9f5f-9631668ba73a",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Test",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "TouchInput",
+            "id": "240ab750-7e7d-4900-aa58-762cccc04c94",
+            "actions": [
+                {
+                    "name": "CameraMovement",
+                    "type": "Value",
+                    "id": "1a6b5380-f254-41e2-8b40-3c903086202f",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "CameraZoomFirstPosition",
+                    "type": "Value",
+                    "id": "5e63524d-c558-450e-bf98-7260db46762a",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "CameraZoomStart",
+                    "type": "Button",
+                    "id": "64af74de-2a51-4c00-b48b-e67d932d9c5f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold"
+                },
+                {
+                    "name": "CameraZoomSecondPosition",
+                    "type": "Value",
+                    "id": "ab4a57c3-10b1-4f50-8178-6a1fd0e6b467",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "CameraMovementStart",
+                    "type": "Button",
+                    "id": "257a7b27-9c20-4d9b-add4-a1a554400a27",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "cb853b19-96e9-4229-a148-ad4e617b95a8",
+                    "path": "<Touchscreen>/touch0/delta",
+                    "interactions": "",
+                    "processors": "NormalizeVector2",
+                    "groups": "Mobile",
+                    "action": "CameraMovement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "091d2462-2404-462d-8adb-e0f659b941b1",
+                    "path": "<Touchscreen>/touch0/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Mobile",
+                    "action": "CameraZoomFirstPosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d53cbcb3-c9e6-4a51-ba16-25de9bed6b57",
+                    "path": "<Touchscreen>/touch1/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Mobile",
+                    "action": "CameraZoomStart",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d355760b-b237-458e-9d26-191c976dfb4b",
+                    "path": "<Touchscreen>/touch1/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Mobile",
+                    "action": "CameraZoomSecondPosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "66640eab-205c-4ad4-9240-39d3056686b8",
+                    "path": "<Touchscreen>/touch0/press",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "Mobile",
+                    "action": "CameraMovementStart",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
@@ -170,12 +292,23 @@
             "devices": [
                 {
                     "devicePath": "<Keyboard>",
-                    "isOptional": true,
+                    "isOptional": false,
                     "isOR": false
                 },
                 {
                     "devicePath": "<Mouse>",
-                    "isOptional": true,
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "Mobile",
+            "bindingGroup": "Mobile",
+            "devices": [
+                {
+                    "devicePath": "<Touchscreen>",
+                    "isOptional": false,
                     "isOR": false
                 }
             ]
