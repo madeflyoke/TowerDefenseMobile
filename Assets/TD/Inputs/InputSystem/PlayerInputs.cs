@@ -245,7 +245,7 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                     ""id"": ""cb853b19-96e9-4229-a148-ad4e617b95a8"",
                     ""path"": ""<Touchscreen>/touch0/delta"",
                     ""interactions"": """",
-                    ""processors"": ""NormalizeVector2"",
+                    ""processors"": """",
                     ""groups"": ""Mobile"",
                     ""action"": ""CameraMovement"",
                     ""isComposite"": false,

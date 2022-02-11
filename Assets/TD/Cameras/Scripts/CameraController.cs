@@ -60,12 +60,7 @@ namespace TD.Cameras
             {
                 HomeBaseDestroyCamera();
             }
-
-            Debug.Log("PHASE MOVEMENT: " + inputs.TouchInput.CameraMovement.phase);
-            Debug.Log("PHASE ZOOM FIRST: " + inputs.TouchInput.CameraZoomFirstPosition.phase);
-            Debug.Log("PHASE ZOOM SECOND: " + inputs.TouchInput.CameraZoomSecondPosition.phase);
-            Debug.Log("PHASE START: " + inputs.TouchInput.CameraZoomStart.phase);
-
+            Debug.Log(Time.deltaTime);
         }
 
         private async void MoveCamera()
@@ -74,17 +69,25 @@ namespace TD.Cameras
             {
                 return;
             }
-            Debug.Log("CAMERA MOVE START PHASE " + inputs.TouchInput.CameraMovementStart.phase);
-            Debug.Log("CAMERA MOVE PHASE IN: " + inputs.TouchInput.CameraMovement.phase);
+            Vector2 startPos = inputs.TouchInput.CameraZoomFirstPosition.ReadValue<Vector2>();
+            while (Vector2.Distance(inputs.TouchInput.CameraZoomFirstPosition.ReadValue<Vector2>(), startPos) <= 50f)
+            {
+                if (isLock)
+                {
+                    return;
+                }
+                await UniTask.Yield();
+            }
             while (inputs.TouchInput.CameraMovementStart.phase != UnityEngine.InputSystem.InputActionPhase.Waiting)
             {
                 if (isLock)
                 {
                     return;
                 }
-                Vector2 direction = inputs.TouchInput.CameraMovement.ReadValue<Vector2>();
-                Debug.Log("Direction: " + direction);
-                direction *= 0.3f;
+                Vector2 inputValue = -inputs.TouchInput.CameraMovement.ReadValue<Vector2>() / 50f;
+                Vector2 direction = new Vector2(
+                    Mathf.Clamp(inputValue.x, -5f, 5f),
+                    Mathf.Clamp(inputValue.y, -5f, 5f));
                 guiController.GamePlayScreen.BuildMenuController.HideMenu();
                 if (direction.x < 0 && cameraViewCollider.bounds.min.x <= cameraBoundsCollider.bounds.min.x ||
             direction.x > 0 && cameraViewCollider.bounds.max.x >= cameraBoundsCollider.bounds.max.x)
@@ -97,20 +100,38 @@ namespace TD.Cameras
                     direction.y = 0;
                 }
 
-                Vector3 newPos = cam.transform.position + new Vector3(direction.x, 0f, direction.y) * panSpeed * Time.deltaTime;
+                Vector3 newPos = cam.transform.position + new Vector3(direction.x, 0f, direction.y);
                 cam.transform.position = Vector3.Slerp(cam.transform.position, newPos, Time.deltaTime * panSpeed);
+                CheckCameraBounds();
                 await UniTask.Yield();
             }
+            CheckCameraBounds();
+        }
 
+        private async void CheckCameraBounds()
+        {
+            if (cameraViewCollider.bounds.min.x < cameraBoundsCollider.bounds.min.x - 5f ||
+                cameraViewCollider.bounds.max.x > cameraBoundsCollider.bounds.max.x + 5f ||
+                cameraViewCollider.bounds.min.z < cameraBoundsCollider.bounds.min.z - 5f ||
+                    cameraViewCollider.bounds.max.z > cameraBoundsCollider.bounds.max.z + 5f)
+            {
+                isLock = true;
+                while (Vector2.Distance(cam.transform.position, centerPosition) >= 2f)
+                {
+                    cam.transform.position = Vector3.Lerp(transform.position, centerPosition, zoomSensitivity / 10 * Time.deltaTime);
+                    await UniTask.Yield();
+                }
+                isLock = false;
+                return;
+            }
         }
 
         private async void CalculateZoomTouch()
         {
-            Debug.Log("calculate");
-            Debug.Log("PHASE CALCULATE " + inputs.TouchInput.CameraZoomStart.phase);
             float distance = 0f;
             isLock = true;
-            while (inputs.TouchInput.CameraZoomStart.phase != UnityEngine.InputSystem.InputActionPhase.Waiting)
+            while (inputs.TouchInput.CameraZoomStart.phase != UnityEngine.InputSystem.InputActionPhase.Waiting ||
+                inputs.TouchInput.CameraMovementStart.phase != UnityEngine.InputSystem.InputActionPhase.Waiting)
             {
                 float currentDistance = Vector2.Distance(inputs.TouchInput.CameraZoomFirstPosition.ReadValue<Vector2>(),
                     inputs.TouchInput.CameraZoomSecondPosition.ReadValue<Vector2>());
@@ -123,10 +144,6 @@ namespace TD.Cameras
                     ZoomCamera(-1f);
                 }
                 distance = currentDistance;
-
-                Debug.Log("CURRENT " + currentDistance);
-                Debug.Log("PREV " + distance);
-
                 await UniTask.Yield();
             }
             isLock = false;
@@ -173,7 +190,6 @@ namespace TD.Cameras
                 }
             }
         }
-
         private async void HomeBaseDestroyCamera()
         {
             isLock = true;
