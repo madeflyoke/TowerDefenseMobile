@@ -194,7 +194,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "CameraZoomFirstPosition",
+                    "name": "CameraFirstTouchPosition",
                     "type": "Value",
                     "id": "5e63524d-c558-450e-bf98-7260db46762a",
                     "expectedControlType": "Vector2",
@@ -210,7 +210,7 @@
                     "interactions": "Hold"
                 },
                 {
-                    "name": "CameraZoomSecondPosition",
+                    "name": "CameraSecondTouchPosition",
                     "type": "Value",
                     "id": "ab4a57c3-10b1-4f50-8178-6a1fd0e6b467",
                     "expectedControlType": "Vector2",
@@ -221,6 +221,14 @@
                     "name": "CameraMovementStart",
                     "type": "Button",
                     "id": "257a7b27-9c20-4d9b-add4-a1a554400a27",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Select",
+                    "type": "Button",
+                    "id": "ed206e0a-2ae5-4b36-a7dc-b85d25d895df",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -245,7 +253,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Mobile",
-                    "action": "CameraZoomFirstPosition",
+                    "action": "CameraFirstTouchPosition",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -267,7 +275,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Mobile",
-                    "action": "CameraZoomSecondPosition",
+                    "action": "CameraSecondTouchPosition",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -279,6 +287,17 @@
                     "processors": "",
                     "groups": "Mobile",
                     "action": "CameraMovementStart",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "01f16969-6123-477f-be83-475302246d22",
+                    "path": "<Touchscreen>/touch0/tap",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": "Mobile",
+                    "action": "Select",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

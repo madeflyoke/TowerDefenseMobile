@@ -16,11 +16,13 @@ namespace TD.Inputs
         private Camera cam;
         private void Initialize()
         {
+            enabled = false;
+            enabled = true;
             cam = Camera.main;
             inputs.Enable();
+            //inputs.TouchInput.Select.performed += ctx => CheckSelectedPosition();
             inputs.General.Select.performed += ctx => CheckSelectedPosition();
         }
-
         private void OnEnable()
         {
             inputs = new PlayerInputs();
@@ -41,6 +43,7 @@ namespace TD.Inputs
 
         private void CheckSelectedPosition()
         {
+            // Ray ray = cam.ScreenPointToRay(inputs.TouchInput.CameraFirstTouchPosition.ReadValue<Vector2>());
             Ray ray = cam.ScreenPointToRay(inputs.General.SelectPosition.ReadValue<Vector2>());
             if (Physics.Raycast(ray, out RaycastHit hitInfo))
             {
@@ -48,6 +51,7 @@ namespace TD.Inputs
                 {
                     return;
                 }
+                Debug.Log("SELECT");
                 selectObjectEvent?.Invoke(hitInfo.collider.gameObject);
             }
         }

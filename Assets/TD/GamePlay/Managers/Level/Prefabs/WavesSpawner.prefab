@@ -112,7 +112,7 @@ MonoBehaviour:
     - {fileID: 8295867662154025791}
     - {fileID: 8295867661569220445}
     - {fileID: 8295867661198254036}
-  - delay: 1
+  - delay: 60
     path: {fileID: 0}
     waves:
     - {fileID: 3760507898824330649}

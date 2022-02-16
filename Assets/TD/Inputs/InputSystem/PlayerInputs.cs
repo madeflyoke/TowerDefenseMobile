@@ -207,7 +207,7 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""CameraZoomFirstPosition"",
+                    ""name"": ""CameraFirstTouchPosition"",
                     ""type"": ""Value"",
                     ""id"": ""5e63524d-c558-450e-bf98-7260db46762a"",
                     ""expectedControlType"": ""Vector2"",
@@ -223,7 +223,7 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                     ""interactions"": ""Hold""
                 },
                 {
-                    ""name"": ""CameraZoomSecondPosition"",
+                    ""name"": ""CameraSecondTouchPosition"",
                     ""type"": ""Value"",
                     ""id"": ""ab4a57c3-10b1-4f50-8178-6a1fd0e6b467"",
                     ""expectedControlType"": ""Vector2"",
@@ -234,6 +234,14 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                     ""name"": ""CameraMovementStart"",
                     ""type"": ""Button"",
                     ""id"": ""257a7b27-9c20-4d9b-add4-a1a554400a27"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Select"",
+                    ""type"": ""Button"",
+                    ""id"": ""ed206e0a-2ae5-4b36-a7dc-b85d25d895df"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -258,7 +266,7 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Mobile"",
-                    ""action"": ""CameraZoomFirstPosition"",
+                    ""action"": ""CameraFirstTouchPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -280,7 +288,7 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Mobile"",
-                    ""action"": ""CameraZoomSecondPosition"",
+                    ""action"": ""CameraSecondTouchPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -292,6 +300,17 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Mobile"",
                     ""action"": ""CameraMovementStart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""01f16969-6123-477f-be83-475302246d22"",
+                    ""path"": ""<Touchscreen>/touch0/tap"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": ""Mobile"",
+                    ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -338,10 +357,11 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
         // TouchInput
         m_TouchInput = asset.FindActionMap("TouchInput", throwIfNotFound: true);
         m_TouchInput_CameraMovement = m_TouchInput.FindAction("CameraMovement", throwIfNotFound: true);
-        m_TouchInput_CameraZoomFirstPosition = m_TouchInput.FindAction("CameraZoomFirstPosition", throwIfNotFound: true);
+        m_TouchInput_CameraFirstTouchPosition = m_TouchInput.FindAction("CameraFirstTouchPosition", throwIfNotFound: true);
         m_TouchInput_CameraZoomStart = m_TouchInput.FindAction("CameraZoomStart", throwIfNotFound: true);
-        m_TouchInput_CameraZoomSecondPosition = m_TouchInput.FindAction("CameraZoomSecondPosition", throwIfNotFound: true);
+        m_TouchInput_CameraSecondTouchPosition = m_TouchInput.FindAction("CameraSecondTouchPosition", throwIfNotFound: true);
         m_TouchInput_CameraMovementStart = m_TouchInput.FindAction("CameraMovementStart", throwIfNotFound: true);
+        m_TouchInput_Select = m_TouchInput.FindAction("Select", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -457,19 +477,21 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
     private readonly InputActionMap m_TouchInput;
     private ITouchInputActions m_TouchInputActionsCallbackInterface;
     private readonly InputAction m_TouchInput_CameraMovement;
-    private readonly InputAction m_TouchInput_CameraZoomFirstPosition;
+    private readonly InputAction m_TouchInput_CameraFirstTouchPosition;
     private readonly InputAction m_TouchInput_CameraZoomStart;
-    private readonly InputAction m_TouchInput_CameraZoomSecondPosition;
+    private readonly InputAction m_TouchInput_CameraSecondTouchPosition;
     private readonly InputAction m_TouchInput_CameraMovementStart;
+    private readonly InputAction m_TouchInput_Select;
     public struct TouchInputActions
     {
         private @PlayerInputs m_Wrapper;
         public TouchInputActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @CameraMovement => m_Wrapper.m_TouchInput_CameraMovement;
-        public InputAction @CameraZoomFirstPosition => m_Wrapper.m_TouchInput_CameraZoomFirstPosition;
+        public InputAction @CameraFirstTouchPosition => m_Wrapper.m_TouchInput_CameraFirstTouchPosition;
         public InputAction @CameraZoomStart => m_Wrapper.m_TouchInput_CameraZoomStart;
-        public InputAction @CameraZoomSecondPosition => m_Wrapper.m_TouchInput_CameraZoomSecondPosition;
+        public InputAction @CameraSecondTouchPosition => m_Wrapper.m_TouchInput_CameraSecondTouchPosition;
         public InputAction @CameraMovementStart => m_Wrapper.m_TouchInput_CameraMovementStart;
+        public InputAction @Select => m_Wrapper.m_TouchInput_Select;
         public InputActionMap Get() { return m_Wrapper.m_TouchInput; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -482,18 +504,21 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                 @CameraMovement.started -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraMovement;
                 @CameraMovement.performed -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraMovement;
                 @CameraMovement.canceled -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraMovement;
-                @CameraZoomFirstPosition.started -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraZoomFirstPosition;
-                @CameraZoomFirstPosition.performed -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraZoomFirstPosition;
-                @CameraZoomFirstPosition.canceled -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraZoomFirstPosition;
+                @CameraFirstTouchPosition.started -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraFirstTouchPosition;
+                @CameraFirstTouchPosition.performed -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraFirstTouchPosition;
+                @CameraFirstTouchPosition.canceled -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraFirstTouchPosition;
                 @CameraZoomStart.started -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraZoomStart;
                 @CameraZoomStart.performed -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraZoomStart;
                 @CameraZoomStart.canceled -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraZoomStart;
-                @CameraZoomSecondPosition.started -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraZoomSecondPosition;
-                @CameraZoomSecondPosition.performed -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraZoomSecondPosition;
-                @CameraZoomSecondPosition.canceled -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraZoomSecondPosition;
+                @CameraSecondTouchPosition.started -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraSecondTouchPosition;
+                @CameraSecondTouchPosition.performed -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraSecondTouchPosition;
+                @CameraSecondTouchPosition.canceled -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraSecondTouchPosition;
                 @CameraMovementStart.started -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraMovementStart;
                 @CameraMovementStart.performed -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraMovementStart;
                 @CameraMovementStart.canceled -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnCameraMovementStart;
+                @Select.started -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnSelect;
+                @Select.performed -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnSelect;
+                @Select.canceled -= m_Wrapper.m_TouchInputActionsCallbackInterface.OnSelect;
             }
             m_Wrapper.m_TouchInputActionsCallbackInterface = instance;
             if (instance != null)
@@ -501,18 +526,21 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                 @CameraMovement.started += instance.OnCameraMovement;
                 @CameraMovement.performed += instance.OnCameraMovement;
                 @CameraMovement.canceled += instance.OnCameraMovement;
-                @CameraZoomFirstPosition.started += instance.OnCameraZoomFirstPosition;
-                @CameraZoomFirstPosition.performed += instance.OnCameraZoomFirstPosition;
-                @CameraZoomFirstPosition.canceled += instance.OnCameraZoomFirstPosition;
+                @CameraFirstTouchPosition.started += instance.OnCameraFirstTouchPosition;
+                @CameraFirstTouchPosition.performed += instance.OnCameraFirstTouchPosition;
+                @CameraFirstTouchPosition.canceled += instance.OnCameraFirstTouchPosition;
                 @CameraZoomStart.started += instance.OnCameraZoomStart;
                 @CameraZoomStart.performed += instance.OnCameraZoomStart;
                 @CameraZoomStart.canceled += instance.OnCameraZoomStart;
-                @CameraZoomSecondPosition.started += instance.OnCameraZoomSecondPosition;
-                @CameraZoomSecondPosition.performed += instance.OnCameraZoomSecondPosition;
-                @CameraZoomSecondPosition.canceled += instance.OnCameraZoomSecondPosition;
+                @CameraSecondTouchPosition.started += instance.OnCameraSecondTouchPosition;
+                @CameraSecondTouchPosition.performed += instance.OnCameraSecondTouchPosition;
+                @CameraSecondTouchPosition.canceled += instance.OnCameraSecondTouchPosition;
                 @CameraMovementStart.started += instance.OnCameraMovementStart;
                 @CameraMovementStart.performed += instance.OnCameraMovementStart;
                 @CameraMovementStart.canceled += instance.OnCameraMovementStart;
+                @Select.started += instance.OnSelect;
+                @Select.performed += instance.OnSelect;
+                @Select.canceled += instance.OnSelect;
             }
         }
     }
@@ -546,9 +574,10 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
     public interface ITouchInputActions
     {
         void OnCameraMovement(InputAction.CallbackContext context);
-        void OnCameraZoomFirstPosition(InputAction.CallbackContext context);
+        void OnCameraFirstTouchPosition(InputAction.CallbackContext context);
         void OnCameraZoomStart(InputAction.CallbackContext context);
-        void OnCameraZoomSecondPosition(InputAction.CallbackContext context);
+        void OnCameraSecondTouchPosition(InputAction.CallbackContext context);
         void OnCameraMovementStart(InputAction.CallbackContext context);
+        void OnSelect(InputAction.CallbackContext context);
     }
 }

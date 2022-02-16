@@ -4,6 +4,7 @@ using Zenject;
 using TD.GUI;
 using Cysharp.Threading.Tasks;
 using TD.GamePlay.Managers;
+using System.Threading;
 
 namespace TD.Cameras
 {
@@ -30,6 +31,7 @@ namespace TD.Cameras
         private CinemachineRecomposer camRecomposer;
         private Vector3 standardViewColliderSize;
         private bool isLock;
+        private CancellationTokenSource cancellationToken;
 
         private void Awake()
         {
@@ -39,6 +41,7 @@ namespace TD.Cameras
             inputs = new PlayerInputs();
             centerPosition = transform.position;
             standardViewColliderSize = cameraViewCollider.size;
+            cancellationToken =  new CancellationTokenSource();
         }
 
         private void OnEnable()
@@ -52,6 +55,7 @@ namespace TD.Cameras
         {
             inputs.Disable();
             gameManager.endGameEvent -= HomeBaseDestroyCamera;
+            cancellationToken.Cancel();
         }
 
         private void Update()
@@ -60,35 +64,34 @@ namespace TD.Cameras
             {
                 HomeBaseDestroyCamera();
             }
-            Debug.Log(Time.deltaTime);
         }
 
         private async void MoveCamera()
         {
             if (isLock)
-            {
+            { 
                 return;
             }
-            Vector2 startPos = inputs.TouchInput.CameraZoomFirstPosition.ReadValue<Vector2>();
-            while (Vector2.Distance(inputs.TouchInput.CameraZoomFirstPosition.ReadValue<Vector2>(), startPos) <= 50f)
+            Vector2 startPos = inputs.TouchInput.CameraFirstTouchPosition.ReadValue<Vector2>();
+            while (Vector2.Distance(inputs.TouchInput.CameraFirstTouchPosition.ReadValue<Vector2>(), startPos) <= 100f)
             {
-                if (isLock)
+                if (isLock||inputs.TouchInput.CameraMovementStart.phase == UnityEngine.InputSystem.InputActionPhase.Waiting)
                 {
-                    return;
+                    return;    //lock the camera before small (50f) distance will not be pass through
                 }
-                await UniTask.Yield();
+                await UniTask.Yield(cancellationToken: cancellationToken.Token);
             }
+            guiController.GamePlayScreen.BuildMenuController.HideMenu();
             while (inputs.TouchInput.CameraMovementStart.phase != UnityEngine.InputSystem.InputActionPhase.Waiting)
             {
                 if (isLock)
                 {
                     return;
                 }
-                Vector2 inputValue = -inputs.TouchInput.CameraMovement.ReadValue<Vector2>() / 50f;
+                Vector2 inputValue = -inputs.TouchInput.CameraMovement.ReadValue<Vector2>() / panSpeed;
                 Vector2 direction = new Vector2(
                     Mathf.Clamp(inputValue.x, -5f, 5f),
-                    Mathf.Clamp(inputValue.y, -5f, 5f));
-                guiController.GamePlayScreen.BuildMenuController.HideMenu();
+                    Mathf.Clamp(inputValue.y, -5f, 5f));  //clamp touch deltas  
                 if (direction.x < 0 && cameraViewCollider.bounds.min.x <= cameraBoundsCollider.bounds.min.x ||
             direction.x > 0 && cameraViewCollider.bounds.max.x >= cameraBoundsCollider.bounds.max.x)
                 {
@@ -103,9 +106,9 @@ namespace TD.Cameras
                 Vector3 newPos = cam.transform.position + new Vector3(direction.x, 0f, direction.y);
                 cam.transform.position = Vector3.Slerp(cam.transform.position, newPos, Time.deltaTime * panSpeed);
                 CheckCameraBounds();
-                await UniTask.Yield();
+                await UniTask.Yield(cancellationToken:cancellationToken.Token);
             }
-            CheckCameraBounds();
+            CheckCameraBounds(); //check before and after camera moves 
         }
 
         private async void CheckCameraBounds()
@@ -116,10 +119,10 @@ namespace TD.Cameras
                     cameraViewCollider.bounds.max.z > cameraBoundsCollider.bounds.max.z + 5f)
             {
                 isLock = true;
-                while (Vector2.Distance(cam.transform.position, centerPosition) >= 2f)
+                while (Vector2.Distance(cam.transform.position, centerPosition) >= 2f) //return camera to center
                 {
                     cam.transform.position = Vector3.Lerp(transform.position, centerPosition, zoomSensitivity / 10 * Time.deltaTime);
-                    await UniTask.Yield();
+                    await UniTask.Yield(cancellationToken:cancellationToken.Token); 
                 }
                 isLock = false;
                 return;
@@ -130,11 +133,11 @@ namespace TD.Cameras
         {
             float distance = 0f;
             isLock = true;
-            while (inputs.TouchInput.CameraZoomStart.phase != UnityEngine.InputSystem.InputActionPhase.Waiting ||
+            while (inputs.TouchInput.CameraZoomStart.phase != UnityEngine.InputSystem.InputActionPhase.Waiting &&
                 inputs.TouchInput.CameraMovementStart.phase != UnityEngine.InputSystem.InputActionPhase.Waiting)
             {
-                float currentDistance = Vector2.Distance(inputs.TouchInput.CameraZoomFirstPosition.ReadValue<Vector2>(),
-                    inputs.TouchInput.CameraZoomSecondPosition.ReadValue<Vector2>());
+                float currentDistance = Vector2.Distance(inputs.TouchInput.CameraFirstTouchPosition.ReadValue<Vector2>(),
+                    inputs.TouchInput.CameraSecondTouchPosition.ReadValue<Vector2>());
                 if (currentDistance > distance)
                 {
                     ZoomCamera(1f);
@@ -144,7 +147,7 @@ namespace TD.Cameras
                     ZoomCamera(-1f);
                 }
                 distance = currentDistance;
-                await UniTask.Yield();
+                await UniTask.Yield(cancellationToken:cancellationToken.Token);
             }
             isLock = false;
         }
@@ -209,7 +212,7 @@ namespace TD.Cameras
                 float zoomRecomposer = Mathf.Clamp(camRecomposer.m_Tilt +
                     (zoomSensitivity * Time.deltaTime), minZoomTilt, maxZoomTilt);
                 camRecomposer.m_Tilt = zoomRecomposer;
-                await UniTask.Yield();
+                await UniTask.Yield(cancellationToken:cancellationToken.Token);
             }
         }
     }

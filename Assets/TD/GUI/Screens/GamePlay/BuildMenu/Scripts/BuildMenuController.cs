@@ -48,7 +48,7 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu
         }
      
         public void SetMenu(GameObject towerSpot)
-        {
+        {             
             CurrentTowerSpot = towerSpot;
             transform.localScale = transform.localScale*((maxBuildMenuSize-1f)*(virtualCamOffset.m_Offset.z)/40f)+standardScale;
             transform.DOScale(transform.localScale, 0.1f).From(Vector3.zero);
@@ -59,6 +59,7 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu
                 {
                     CurrentTower = targetTower;
                     gameObject.transform.position = cam.WorldToScreenPoint(targetTower.transform.position + (Vector3.up * 2.5f));
+                    Debug.Log("PUNCH");
                     CurrentTower.transform.DOPunchScale(Vector3.one * 0.2f, 0.2f);
                     CurrentTower.Targeter.AttackRangeCircle.SetActive(true);
                     SetUpgradeMenu();
