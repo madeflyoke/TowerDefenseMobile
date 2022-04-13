@@ -23,7 +23,7 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                     ""type"": ""Button"",
                     ""id"": ""4f0f0f4c-ed74-40c6-9175-f97516312e8e"",
                     ""expectedControlType"": ""Button"",
-                    ""processors"": """",
+                    ""processors"": ""Clamp(min=-1,max=1)"",
                     ""interactions"": """"
                 },
                 {
@@ -48,15 +48,7 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                     ""id"": ""18381fc8-bb7c-4309-a4d2-36dde283e9ca"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": ""Clamp(min=-1,max=1)"",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Test"",
-                    ""type"": ""Value"",
-                    ""id"": ""5f9a77c4-ca30-4ea6-bed7-9687a404d2ed"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """"
+                    ""interactions"": ""Hold""
                 }
             ],
             ""bindings"": [
@@ -180,17 +172,6 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                     ""action"": ""CameraZoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""f8312789-02e6-4650-9f5f-9631668ba73a"",
-                    ""path"": ""<Mouse>/delta"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Test"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -353,7 +334,6 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
         m_General_SelectPosition = m_General.FindAction("SelectPosition", throwIfNotFound: true);
         m_General_Select = m_General.FindAction("Select", throwIfNotFound: true);
         m_General_CameraZoom = m_General.FindAction("CameraZoom", throwIfNotFound: true);
-        m_General_Test = m_General.FindAction("Test", throwIfNotFound: true);
         // TouchInput
         m_TouchInput = asset.FindActionMap("TouchInput", throwIfNotFound: true);
         m_TouchInput_CameraMovement = m_TouchInput.FindAction("CameraMovement", throwIfNotFound: true);
@@ -415,7 +395,6 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
     private readonly InputAction m_General_SelectPosition;
     private readonly InputAction m_General_Select;
     private readonly InputAction m_General_CameraZoom;
-    private readonly InputAction m_General_Test;
     public struct GeneralActions
     {
         private @PlayerInputs m_Wrapper;
@@ -424,7 +403,6 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
         public InputAction @SelectPosition => m_Wrapper.m_General_SelectPosition;
         public InputAction @Select => m_Wrapper.m_General_Select;
         public InputAction @CameraZoom => m_Wrapper.m_General_CameraZoom;
-        public InputAction @Test => m_Wrapper.m_General_Test;
         public InputActionMap Get() { return m_Wrapper.m_General; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -446,9 +424,6 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                 @CameraZoom.started -= m_Wrapper.m_GeneralActionsCallbackInterface.OnCameraZoom;
                 @CameraZoom.performed -= m_Wrapper.m_GeneralActionsCallbackInterface.OnCameraZoom;
                 @CameraZoom.canceled -= m_Wrapper.m_GeneralActionsCallbackInterface.OnCameraZoom;
-                @Test.started -= m_Wrapper.m_GeneralActionsCallbackInterface.OnTest;
-                @Test.performed -= m_Wrapper.m_GeneralActionsCallbackInterface.OnTest;
-                @Test.canceled -= m_Wrapper.m_GeneralActionsCallbackInterface.OnTest;
             }
             m_Wrapper.m_GeneralActionsCallbackInterface = instance;
             if (instance != null)
@@ -465,9 +440,6 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                 @CameraZoom.started += instance.OnCameraZoom;
                 @CameraZoom.performed += instance.OnCameraZoom;
                 @CameraZoom.canceled += instance.OnCameraZoom;
-                @Test.started += instance.OnTest;
-                @Test.performed += instance.OnTest;
-                @Test.canceled += instance.OnTest;
             }
         }
     }
@@ -569,7 +541,6 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
         void OnSelectPosition(InputAction.CallbackContext context);
         void OnSelect(InputAction.CallbackContext context);
         void OnCameraZoom(InputAction.CallbackContext context);
-        void OnTest(InputAction.CallbackContext context);
     }
     public interface ITouchInputActions
     {

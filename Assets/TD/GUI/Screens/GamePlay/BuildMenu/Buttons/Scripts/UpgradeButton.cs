@@ -62,7 +62,6 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu.Buttons
         {
             if (canUpgrade == false)
             {
-                Debug.Log("false");
                 return;
             }
             buildMenu.PlayerInfo.RemoveCurrency(buildMenu.CurrentTower.NextTowerLevel.Cost);

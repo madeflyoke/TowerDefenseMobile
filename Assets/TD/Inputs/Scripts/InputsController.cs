@@ -20,8 +20,12 @@ namespace TD.Inputs
             enabled = true;
             cam = Camera.main;
             inputs.Enable();
-            //inputs.TouchInput.Select.performed += ctx => CheckSelectedPosition();
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR
+           
             inputs.General.Select.performed += ctx => CheckSelectedPosition();
+#else
+            inputs.TouchInput.Select.performed += ctx => CheckSelectedPosition();
+#endif
         }
         private void OnEnable()
         {
@@ -43,15 +47,17 @@ namespace TD.Inputs
 
         private void CheckSelectedPosition()
         {
-            // Ray ray = cam.ScreenPointToRay(inputs.TouchInput.CameraFirstTouchPosition.ReadValue<Vector2>());
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR
             Ray ray = cam.ScreenPointToRay(inputs.General.SelectPosition.ReadValue<Vector2>());
+#else
+            Ray ray = cam.ScreenPointToRay(inputs.TouchInput.CameraFirstTouchPosition.ReadValue<Vector2>());
+#endif
             if (Physics.Raycast(ray, out RaycastHit hitInfo))
             {
                 if (EventSystem.current.IsPointerOverGameObject())
                 {
                     return;
                 }
-                Debug.Log("SELECT");
                 selectObjectEvent?.Invoke(hitInfo.collider.gameObject);
             }
         }

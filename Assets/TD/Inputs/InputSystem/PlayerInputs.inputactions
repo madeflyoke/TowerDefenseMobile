@@ -10,7 +10,7 @@
                     "type": "Button",
                     "id": "4f0f0f4c-ed74-40c6-9175-f97516312e8e",
                     "expectedControlType": "Button",
-                    "processors": "",
+                    "processors": "Clamp(min=-1,max=1)",
                     "interactions": ""
                 },
                 {
@@ -35,15 +35,7 @@
                     "id": "18381fc8-bb7c-4309-a4d2-36dde283e9ca",
                     "expectedControlType": "Axis",
                     "processors": "Clamp(min=-1,max=1)",
-                    "interactions": ""
-                },
-                {
-                    "name": "Test",
-                    "type": "Value",
-                    "id": "5f9a77c4-ca30-4ea6-bed7-9687a404d2ed",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": ""
+                    "interactions": "Hold"
                 }
             ],
             "bindings": [
@@ -167,17 +159,6 @@
                     "action": "CameraZoom",
                     "isComposite": false,
                     "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "f8312789-02e6-4650-9f5f-9631668ba73a",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Test",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 }
             ]
         },

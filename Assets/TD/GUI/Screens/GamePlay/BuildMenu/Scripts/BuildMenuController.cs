@@ -59,7 +59,6 @@ namespace TD.GUI.Screens.GamePlay.BuildMenu
                 {
                     CurrentTower = targetTower;
                     gameObject.transform.position = cam.WorldToScreenPoint(targetTower.transform.position + (Vector3.up * 2.5f));
-                    Debug.Log("PUNCH");
                     CurrentTower.transform.DOPunchScale(Vector3.one * 0.2f, 0.2f);
                     CurrentTower.Targeter.AttackRangeCircle.SetActive(true);
                     SetUpgradeMenu();
