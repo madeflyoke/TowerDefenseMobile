@@ -7,11 +7,15 @@ using TD.GUI.Buttons;
 using TD.GUI.Screens.EndGame.Buttons;
 using TD.GUI.Screens.GamePlay.HUD;
 using TD.GUI.Screens.MainMenu.Buttons;
+using TD.Ad;
+using Zenject;
 
 namespace TD.GamePlay.Managers
 {
     public class GameManager : MonoBehaviour
     {
+        [Inject] public AdManager adManager { get; private set; }
+        
         public event Action launchGameStateEvent;
         public event Action startLevelEvent;
         public event Action endGameEvent;
@@ -32,10 +36,13 @@ namespace TD.GamePlay.Managers
         {
             Application.targetFrameRate = targetFPS;
         }
+
         private void Start()
         {
+            adManager.Initialize();
             LaunchGameState();
         }
+
         private void GamePlayInitialize()
         {
             homeBase = FindObjectOfType<HomeBase>();
@@ -45,14 +52,6 @@ namespace TD.GamePlay.Managers
             CurrencyAmount = startCurrencyAmount;
             homeBase.homeBaseDestroyedEvent += EndGameLogic;
             wavesSpawner.wavesEndEvent += EndGameLogic;
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                EndGameLogic();
-            }
         }
 
         public void CheckButtonCall(BaseButton button)
@@ -87,6 +86,7 @@ namespace TD.GamePlay.Managers
                 await SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
                 restartLevelEvent?.Invoke();
                 GamePlayInitialize();
+                adManager.ShowInterstitial();
             }
         }
 
