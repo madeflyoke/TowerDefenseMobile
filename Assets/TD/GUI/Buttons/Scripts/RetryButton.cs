@@ -8,7 +8,7 @@ namespace TD.GUI.Screens.GamePlay.HUD
     public class RetryButton : BaseButton
     {
         [Inject] private GameManager gameManager;
-        
+
         protected override void Listeners()
         {
             base.Listeners();

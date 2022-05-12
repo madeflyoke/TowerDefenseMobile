@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "812613886244",
+    "project_id": "defendthecastle-1ac66",
+    "storage_bucket": "defendthecastle-1ac66.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812613886244:android:e52b6d229718e5ef1e93b1",
+        "android_client_info": {
+          "package_name": "com.HC.Bel.DefendTheCastleTDGame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "812613886244-7uj06s9ojlfjhkaklsqc45kgm6rjic9m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlZsPYwy8xjYcLBMw-SOQR63skOj9ZBG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "812613886244-7uj06s9ojlfjhkaklsqc45kgm6rjic9m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

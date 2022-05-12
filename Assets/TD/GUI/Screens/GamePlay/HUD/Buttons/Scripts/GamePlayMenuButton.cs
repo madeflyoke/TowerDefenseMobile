@@ -2,12 +2,16 @@ using TD.GUI.Screens.GamePlay.Menu;
 using UnityEngine;
 using DG.Tweening;
 using TD.GUI.Buttons;
+using Zenject;
+using TD.Services.Firebase;
 
 namespace TD.GUI.Screens.GamePlay.HUD.Buttons
 {
     public class GamePlayMenuButton : BaseButton
     {
-        [SerializeField] private GamePlayMenu gamePlayMenu; 
+        [Inject] private AnalyticsManager analyticsManager;
+
+        [SerializeField] private GamePlayMenu gamePlayMenu;       
         protected override void Listeners()
         {
             base.Listeners();
@@ -18,7 +22,9 @@ namespace TD.GUI.Screens.GamePlay.HUD.Buttons
             }
             else
             {
-                gamePlayMenu.Show();
+                analyticsManager.SendEvent(LogEventName.SettingsShowHideEvent,
+                    new EventParameter(LogEventParameterName.ShowHideBoolean, true));
+                gamePlayMenu.Show();           
             }            
         }
     }

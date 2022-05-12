@@ -8,6 +8,7 @@ using TD.GUI.Screens.EndGame.Buttons;
 using TD.GUI.Screens.GamePlay.HUD;
 using TD.GUI.Screens.MainMenu.Buttons;
 using TD.Ad;
+using TD.Services.Firebase;
 using Zenject;
 
 namespace TD.GamePlay.Managers
@@ -15,7 +16,8 @@ namespace TD.GamePlay.Managers
     public class GameManager : MonoBehaviour
     {
         [Inject] public AdManager adManager { get; private set; }
-        
+        [Inject] public AnalyticsManager analyticsManager { get; private set; }
+
         public event Action launchGameStateEvent;
         public event Action startLevelEvent;
         public event Action endGameEvent;
@@ -36,10 +38,11 @@ namespace TD.GamePlay.Managers
         {
             Application.targetFrameRate = targetFPS;
         }
-
+     
         private void Start()
         {
-            adManager.Initialize();
+            //adManager.Initialize();
+            analyticsManager.Initialize();
             LaunchGameState();
         }
 
@@ -72,7 +75,7 @@ namespace TD.GamePlay.Managers
 
         private async void LaunchGameState()
         {
-            if (SceneManager.GetActiveScene().buildIndex!=0)
+            if (SceneManager.GetActiveScene().buildIndex != 0)
             {
                 await SceneManager.LoadSceneAsync(0);
             }
