@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GoogleMobileAds.Api;
 using System;
+using TD.Services.Firebase;
 
 namespace TD.Ad
 {
@@ -17,11 +18,13 @@ namespace TD.Ad
 
         private string interstitialAdUnitId;
         private InterstitialAd interstitialAd;
+        private AnalyticsManager analyticsManager;
 
-        public void Initialize()
+        public void Initialize(AnalyticsManager analyticsManager)
         {
+            this.analyticsManager = analyticsManager;
             MobileAds.Initialize((initStatus) =>
-            {                
+            {
                 Dictionary<string, AdapterStatus> map = initStatus.getAdapterStatusMap();
                 foreach (KeyValuePair<string, AdapterStatus> keyValuePair in map)
                 {
@@ -65,15 +68,15 @@ namespace TD.Ad
         private void LoadInterstitial()
         {
             AdRequest request = new AdRequest.Builder().Build();
-            if (interstitialAd!=null)
+            if (interstitialAd != null)
             {
-                interstitialAd.LoadAd(request);
+                interstitialAd.LoadAd(request);              
             }
         }
 
         public void ShowInterstitial()
         {
-            if (interstitialAd!=null&&interstitialAd.IsLoaded())
+            if (interstitialAd != null && interstitialAd.IsLoaded())
             {
                 interstitialAd.Show();
             }
@@ -130,7 +133,7 @@ namespace TD.Ad
         #region Callbacks
         public void HandleOnAdLoaded(object sender, EventArgs args)
         {
-            Debug.Log($"{sender} Ad Loaded");
+            Debug.Log($"{sender} Ad Loaded"); 
         }
 
         public void HandleOnAdFailedToLoad(object sender, AdFailedToLoadEventArgs args)
@@ -141,13 +144,22 @@ namespace TD.Ad
         public void HandleOnAdOpened(object sender, EventArgs args)
         {
             Debug.Log($"{sender} Ad Opened");
+            if (sender.GetType() == typeof(InterstitialAd)&&interstitialAd!=null)
+            {
+                analyticsManager.SendEvent(LogEventName.AdShownEvent,
+                new EventParameter(LogEventParameterName.AdUnitString, sender),
+                new EventParameter(LogEventParameterName.AdMediationAdapterString, interstitialAd.GetResponseInfo().GetMediationAdapterClassName()));
+            }           
         }
 
         public void HandleOnAdClosed(object sender, EventArgs args)
         {
-            Debug.Log($"{sender} Ad Closed (return to app)");
+            Debug.Log($"{sender} Ad Closed (return to app)");      
             if (sender.GetType() == typeof(InterstitialAd))
             {
+                analyticsManager.SendEvent(LogEventName.AdFinishedEvent,
+                   new EventParameter(LogEventParameterName.AdUnitString, sender),
+                   new EventParameter(LogEventParameterName.AdMediationAdapterString, interstitialAd.GetResponseInfo().GetMediationAdapterClassName()));
                 Debug.Log($"{sender} Ad, loading next...");
                 LoadInterstitial();
             }
@@ -158,7 +170,7 @@ namespace TD.Ad
             Debug.Log($"{sender} Ad Failed to Show, msg: {args.AdError.GetMessage()}");
         }
 
-#endregion
+        #endregion
 
         ~AdManager()
         {

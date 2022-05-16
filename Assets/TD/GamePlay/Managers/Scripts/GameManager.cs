@@ -41,8 +41,8 @@ namespace TD.GamePlay.Managers
      
         private void Start()
         {
-            //adManager.Initialize();
             analyticsManager.Initialize();
+            adManager.Initialize(analyticsManager);
             LaunchGameState();
         }
 

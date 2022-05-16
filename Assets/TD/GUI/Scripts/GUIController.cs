@@ -66,9 +66,9 @@ namespace TD.GUI
 
         private void RestartLevelUI()
         {
-            if (endGameScreen.gameObject.activeInHierarchy==false) //analytics logic
+            if (endGameScreen.gameObject.activeInHierarchy == false) //analytics logic
             {
-                analyticsManager.SendEvent(LogEventName.SettingsRetryButton);
+                analyticsManager.SendEvent(LogEventName.SettingsRetryButtonEvent);
             }
             GamePlayScreen.ResetScreen();
             GamePlayScreen.Initialize();

@@ -18,14 +18,16 @@ namespace TD.GUI.Screens.GamePlay.HUD.Buttons
             transform.DOPunchScale(Vector3.one * 0.2f, 0.1f);
             if (gamePlayMenu.gameObject.activeInHierarchy)
             {
+                analyticsManager.SendEvent(LogEventName.SettingsShowHideEvent,
+                   new EventParameter(LogEventParameterName.ShowHideBoolean, false));
                 gamePlayMenu.Hide();
             }
             else
             {
                 analyticsManager.SendEvent(LogEventName.SettingsShowHideEvent,
                     new EventParameter(LogEventParameterName.ShowHideBoolean, true));
-                gamePlayMenu.Show();           
-            }            
+                gamePlayMenu.Show();
+            }
         }
     }
 }

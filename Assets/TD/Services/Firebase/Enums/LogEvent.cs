@@ -2,13 +2,17 @@ namespace TD.Services.Firebase
 {
     public enum LogEventName
     {
-        SettingsRetryButton,
-        SettingsShowHideEvent
+        SettingsRetryButtonEvent,
+        SettingsShowHideEvent,
+        AdShownEvent,
+        AdFinishedEvent
     }
 
     public enum LogEventParameterName
     {
-        ShowHideBoolean
+        ShowHideBoolean,
+        AdUnitString,
+        AdMediationAdapterString
     }
 }
 

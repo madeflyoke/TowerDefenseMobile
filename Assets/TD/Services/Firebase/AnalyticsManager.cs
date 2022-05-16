@@ -7,11 +7,15 @@ namespace TD.Services.Firebase
 {
     public class AnalyticsManager
     {
-        private const string settingsRetryButtonEvent = "SettingsRetryButtonPressed";
-        private const string settingsShowedEvent = "SettingsShowed";
+        private const string SettingsRetryButtonEvent = "SettingsRetryButtonPressed";
+        private const string SettingsShowedEvent = "SettingsShowed";
+        private const string AdShownEvent = "AdShownEvent";
+        private const string AdFinishedEvent = "AdFinishedEvent";
 
-        private const string showHideParameter = "ShowHide";
-           
+        private const string ShowHideParameter = "ShowHide";
+        private const string AdUnitParameter = "AdUnit";
+        private const string AdMediationAdapterParameter = "AdMediationAdapter";
+
         private FirebaseApp app;
 
         public void Initialize()
@@ -22,7 +26,6 @@ namespace TD.Services.Firebase
                 if (dependencyStatus == DependencyStatus.Available)
                 {
                     app = FirebaseApp.DefaultInstance;
-                    Debug.Log("FIREBASE ANALYTICS IS READY");
                 }
                 else
                 {
@@ -37,11 +40,17 @@ namespace TD.Services.Firebase
             string correctEventName = string.Empty;
             switch (eventName)
             {
-                case LogEventName.SettingsRetryButton:
-                    correctEventName = settingsRetryButtonEvent;
+                case LogEventName.SettingsRetryButtonEvent:
+                    correctEventName = SettingsRetryButtonEvent;
                     break;
                 case LogEventName.SettingsShowHideEvent:
-                    correctEventName = settingsShowedEvent;
+                    correctEventName = SettingsShowedEvent;
+                    break;
+                case LogEventName.AdShownEvent:
+                    correctEventName = AdShownEvent;
+                    break;
+                case LogEventName.AdFinishedEvent:
+                    correctEventName = AdFinishedEvent;
                     break;
                 default:
                     Debug.Log($"Incorrect event name while sending event {eventName}");
@@ -55,7 +64,13 @@ namespace TD.Services.Firebase
                     switch (param.name)
                     {
                         case LogEventParameterName.ShowHideBoolean:
-                            correctParameters.Add(new Parameter(showHideParameter, (bool)param.value == true ? 1 : 0));
+                            correctParameters.Add(new Parameter(ShowHideParameter, (bool)param.value == true ? 1 : 0));
+                            break;
+                        case LogEventParameterName.AdUnitString:
+                            correctParameters.Add(new Parameter(AdUnitParameter, param.value.ToString()));
+                            break;
+                        case LogEventParameterName.AdMediationAdapterString:
+                            correctParameters.Add(new Parameter(AdMediationAdapterParameter, param.value.ToString()));
                             break;
                         default:
                             Debug.Log($"Incorrect parameter name: {param.name} while sending event {eventName}");
@@ -63,7 +78,7 @@ namespace TD.Services.Firebase
                     }
                 }
                 FirebaseAnalytics.LogEvent(correctEventName, correctParameters.ToArray());
-               
+
             }
             else
                 FirebaseAnalytics.LogEvent(correctEventName); //without parameters
