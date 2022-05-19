@@ -6,12 +6,15 @@ using UnityEngine;
 using Zenject;
 using TD.GamePlay.Managers;
 using TD.GUI.Screens.MainMenu;
+using TD.Services.Firebase;
 
 namespace TD.GUI
 {
     public class GUIController : MonoBehaviour
     {
         [Inject] private GameManager gameManager;
+        [Inject] private AnalyticsManager analyticsManager;
+
         [SerializeField] private MainMenuScreen mainMenuScreen;
         [SerializeField] private GamePlayScreen gamePlayScreen;
         [SerializeField] private EndGameScreen endGameScreen;
@@ -63,6 +66,10 @@ namespace TD.GUI
 
         private void RestartLevelUI()
         {
+            if (endGameScreen.gameObject.activeInHierarchy == false) //analytics logic
+            {
+                analyticsManager.SendEvent(LogEventName.SettingsRetryButtonEvent);
+            }
             GamePlayScreen.ResetScreen();
             GamePlayScreen.Initialize();
             ShowScreen(GamePlayScreen);
@@ -79,7 +86,6 @@ namespace TD.GUI
                 }
             }
         }
-
     }
 
 }
